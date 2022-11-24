@@ -27,7 +27,7 @@ func (server *Server) getConfig(ctx *gin.Context) {
 
 func getConfigSampleResponse() ConfigResponse {
 	return ConfigResponse{
-		RequestUrls: []string{"http://salam", "https://requestts"},
+		RequestUrls: []string{"http://192.168.1.111:8080", "http://192.168.43.145:8080"},
 		UrlIdFirst:  []int64{1254444, 258774111},
 		UrlIdSecond: []UrlIdSecond{
 			{
