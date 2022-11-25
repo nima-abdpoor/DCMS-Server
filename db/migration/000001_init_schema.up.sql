@@ -2,7 +2,7 @@ CREATE TABLE "config"
 (
     "id"                bigserial PRIMARY KEY,
     "is_live"           boolean,
-    "synctype"          varchar,
+    "sync_type"          varchar,
     "valid_request_url" varchar,
     "url_id_first"      varchar,
     "url_id_second"     varchar,
