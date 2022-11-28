@@ -1,38 +1,34 @@
 -- name: CreateConfig :one
-INSERT INTO configs (id,
-                     is_live,
+INSERT INTO config (id,
+                     uid,
                      sync_type,
-                     valid_request_url,
-                     url_id_first,
-                     url_id_second,
-                     regex,
-                     start_index,
-                     finish_index)
-values ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;
+                     is_live)
+values ($1, $2, $3, $4) RETURNING *;
 
 -- name: GetConfig :one
-SELECT * FROM configs
+SELECT *
+FROM config
 WHERE id = $1 LIMIT 1;
 
 -- name: ListConfigs :many
-SELECT * FROM configs
-ORDER BY id
-    LIMIT $1
+SELECT *
+FROM config
+ORDER BY id LIMIT $1
 OFFSET $2;
 
 -- name: DeleteConfig :exec
-DELETE FROM configs
-WHERE id = $1;
+DELETE
+FROM config
+WHERE uid = $1;
 
 -- name: UpdateConfig :one
-UPDATE configs
-set is_live = $2 AND
-set sync_type = $3 AND
-set valid_request_url = $4 AND
-set url_id_first = $5 AND
-set url_id_second = $6 AND
-set regex = $7 AND
-set start_index = $7 AND
-set
+UPDATE config
+set is_live = $2 AND uid = $3 AND sync_type = $4
 WHERE id = $1
+    RETURNING *;
+
+-- name: UpdateConfigByUID :one
+UPDATE config
+set is_live = $2 AND sync_type = $3
+WHERE uid = $1
     RETURNING *;
