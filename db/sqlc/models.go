@@ -9,29 +9,25 @@ import (
 )
 
 type Config struct {
-	ID       int64  `json:"id"`
-	Uid      string `json:"uid"`
+	ID       string `json:"id"`
 	IsLive   bool   `json:"is_live"`
 	SyncType string `json:"sync_type"`
 }
 
 type RequestUrl struct {
-	ID         int64          `json:"id"`
-	Uid        string         `json:"uid"`
+	ID         string         `json:"id"`
 	RequestUrl sql.NullString `json:"request_url"`
 }
 
 type UrlFirst struct {
-	ID      int64          `json:"id"`
-	Uid     string         `json:"uid"`
+	ID      string         `json:"id"`
 	UrlHash sql.NullString `json:"url_hash"`
 }
 
 type UrlSecond struct {
-	ID          int64          `json:"id"`
-	Uid         sql.NullString `json:"uid"`
+	ID          string         `json:"id"`
 	UrlHash     sql.NullString `json:"url_hash"`
-	Regex       interface{}    `json:"regex"`
+	Regex       sql.NullString `json:"regex"`
 	StartIndex  sql.NullInt32  `json:"start_index"`
 	FinishIndex sql.NullInt32  `json:"finish_index"`
 }
