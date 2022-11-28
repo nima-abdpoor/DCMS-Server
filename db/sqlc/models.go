@@ -14,17 +14,17 @@ type Config struct {
 	SyncType string `json:"sync_type"`
 }
 
-type RequestUrl struct {
+type Requesturl struct {
 	ID         string         `json:"id"`
 	RequestUrl sql.NullString `json:"request_url"`
 }
 
-type UrlFirst struct {
+type Urlfirst struct {
 	ID      string         `json:"id"`
 	UrlHash sql.NullString `json:"url_hash"`
 }
 
-type UrlSecond struct {
+type Urlsecond struct {
 	ID          string         `json:"id"`
 	UrlHash     sql.NullString `json:"url_hash"`
 	Regex       sql.NullString `json:"regex"`

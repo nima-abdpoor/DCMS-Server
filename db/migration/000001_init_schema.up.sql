@@ -5,13 +5,13 @@ CREATE TABLE "config"
     "sync_type" varchar             NOT NULL
 );
 
-CREATE TABLE "urlFirst"
+CREATE TABLE "urlfirst"
 (
     "id"       varchar PRIMARY KEY NOT NULL,
     "url_hash" varchar
 );
 
-CREATE TABLE "urlSecond"
+CREATE TABLE "urlsecond"
 (
     "id"           varchar PRIMARY KEY NOT NULL,
     "url_hash"     varchar,
@@ -20,17 +20,17 @@ CREATE TABLE "urlSecond"
     "finish_index" int
 );
 
-CREATE TABLE "requestUrl"
+CREATE TABLE "requesturl"
 (
     "id"          varchar PRIMARY KEY NOT NULL,
     "request_url" varchar
 );
 
-ALTER TABLE "urlFirst"
+ALTER TABLE "urlfirst"
     ADD FOREIGN KEY ("id") REFERENCES "config" ("id");
 
-ALTER TABLE "urlSecond"
+ALTER TABLE "urlsecond"
     ADD FOREIGN KEY ("id") REFERENCES "config" ("id");
 
-ALTER TABLE "requestUrl"
+ALTER TABLE "requesturl"
     ADD FOREIGN KEY ("id") REFERENCES "config" ("id");
