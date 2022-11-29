@@ -1,4 +1,4 @@
-package main
+package util
 
 import (
 	"hash/crc32"

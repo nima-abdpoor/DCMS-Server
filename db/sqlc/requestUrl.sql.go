@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createRequestUrl = `-- name: CreateRequestUrl :one
@@ -17,8 +16,8 @@ values ($1, $2) RETURNING id, request_url
 `
 
 type CreateRequestUrlParams struct {
-	ID         string         `json:"id"`
-	RequestUrl sql.NullString `json:"request_url"`
+	ID         string `json:"id"`
+	RequestUrl string `json:"request_url"`
 }
 
 func (q *Queries) CreateRequestUrl(ctx context.Context, arg CreateRequestUrlParams) (Requesturl, error) {
@@ -94,8 +93,8 @@ WHERE id = $1 RETURNING id, request_url
 `
 
 type UpdateRequestUrlParams struct {
-	ID         string         `json:"id"`
-	RequestUrl sql.NullString `json:"request_url"`
+	ID         string `json:"id"`
+	RequestUrl string `json:"request_url"`
 }
 
 func (q *Queries) UpdateRequestUrl(ctx context.Context, arg UpdateRequestUrlParams) (Requesturl, error) {

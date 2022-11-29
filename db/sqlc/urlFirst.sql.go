@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createUrlFirst = `-- name: CreateUrlFirst :one
@@ -17,8 +16,8 @@ values ($1, $2) RETURNING id, url_hash
 `
 
 type CreateUrlFirstParams struct {
-	ID      string         `json:"id"`
-	UrlHash sql.NullString `json:"url_hash"`
+	ID      string `json:"id"`
+	UrlHash string `json:"url_hash"`
 }
 
 func (q *Queries) CreateUrlFirst(ctx context.Context, arg CreateUrlFirstParams) (Urlfirst, error) {
@@ -94,8 +93,8 @@ WHERE id = $1 RETURNING id, url_hash
 `
 
 type UpdateUrlFirstParams struct {
-	ID      string         `json:"id"`
-	UrlHash sql.NullString `json:"url_hash"`
+	ID      string `json:"id"`
+	UrlHash string `json:"url_hash"`
 }
 
 func (q *Queries) UpdateUrlFirst(ctx context.Context, arg UpdateUrlFirstParams) (Urlfirst, error) {

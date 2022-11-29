@@ -4,9 +4,7 @@
 
 package db
 
-import (
-	"database/sql"
-)
+import ()
 
 type Config struct {
 	ID       string `json:"id"`
@@ -15,19 +13,19 @@ type Config struct {
 }
 
 type Requesturl struct {
-	ID         string         `json:"id"`
-	RequestUrl sql.NullString `json:"request_url"`
+	ID         string `json:"id"`
+	RequestUrl string `json:"request_url"`
 }
 
 type Urlfirst struct {
-	ID      string         `json:"id"`
-	UrlHash sql.NullString `json:"url_hash"`
+	ID      string `json:"id"`
+	UrlHash string `json:"url_hash"`
 }
 
 type Urlsecond struct {
-	ID          string         `json:"id"`
-	UrlHash     sql.NullString `json:"url_hash"`
-	Regex       sql.NullString `json:"regex"`
-	StartIndex  sql.NullInt32  `json:"start_index"`
-	FinishIndex sql.NullInt32  `json:"finish_index"`
+	ID          string `json:"id"`
+	UrlHash     string `json:"url_hash"`
+	Regex       string `json:"regex"`
+	StartIndex  int32  `json:"start_index"`
+	FinishIndex int32  `json:"finish_index"`
 }

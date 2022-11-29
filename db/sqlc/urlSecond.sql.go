@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createUrlSecond = `-- name: CreateUrlSecond :one
@@ -20,11 +19,11 @@ values ($1, $2, $3, $4, $5) RETURNING id, url_hash, regex, start_index, finish_i
 `
 
 type CreateUrlSecondParams struct {
-	ID          string         `json:"id"`
-	UrlHash     sql.NullString `json:"url_hash"`
-	Regex       sql.NullString `json:"regex"`
-	StartIndex  sql.NullInt32  `json:"start_index"`
-	FinishIndex sql.NullInt32  `json:"finish_index"`
+	ID          string `json:"id"`
+	UrlHash     string `json:"url_hash"`
+	Regex       string `json:"regex"`
+	StartIndex  int32  `json:"start_index"`
+	FinishIndex int32  `json:"finish_index"`
 }
 
 func (q *Queries) CreateUrlSecond(ctx context.Context, arg CreateUrlSecondParams) (Urlsecond, error) {
@@ -124,11 +123,11 @@ WHERE id = $1 RETURNING id, url_hash, regex, start_index, finish_index
 `
 
 type UpdateUrlSecondParams struct {
-	ID          string         `json:"id"`
-	UrlHash     sql.NullString `json:"url_hash"`
-	Regex       sql.NullString `json:"regex"`
-	StartIndex  sql.NullInt32  `json:"start_index"`
-	FinishIndex sql.NullInt32  `json:"finish_index"`
+	ID          string `json:"id"`
+	UrlHash     string `json:"url_hash"`
+	Regex       string `json:"regex"`
+	StartIndex  int32  `json:"start_index"`
+	FinishIndex int32  `json:"finish_index"`
 }
 
 func (q *Queries) UpdateUrlSecond(ctx context.Context, arg UpdateUrlSecondParams) (Urlsecond, error) {
