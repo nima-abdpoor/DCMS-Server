@@ -29,6 +29,10 @@ func RandomBoolean() bool {
 	return rand.Intn(2) == 1
 }
 
+func RandomUrlHashGenerator() uint32 {
+	return GenerateCR32(RandomString(int(RandomInt(0, 200))))
+}
+
 // RandomString generates a util string of length n
 func RandomString(n int) string {
 	var sb strings.Builder

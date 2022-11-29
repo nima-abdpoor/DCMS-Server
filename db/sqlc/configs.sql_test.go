@@ -72,8 +72,8 @@ func TestQueries_UpdateConfig(t *testing.T) {
 	config := createRandomConfig(t)
 	arg := UpdateConfigParams{
 		ID:       config.ID,
-		IsLive:   util.RandomBoolean(),
-		SyncType: util.RandomSyncType(),
+		IsLive:   config.IsLive,
+		SyncType: config.SyncType,
 	}
 	updatedConfig, err := testQueries.UpdateConfig(context.Background(), arg)
 	require.NoError(t, err)
