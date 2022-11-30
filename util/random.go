@@ -43,16 +43,3 @@ func RandomString(n int) string {
 	}
 	return sb.String()
 }
-
-func RandomOwner(number int) string {
-	return RandomString(number)
-}
-
-func RandomBalance() int64 {
-	return RandomInt(10, 10000)
-}
-
-func RandomCurrency() string {
-	currencies := []string{"EUR", "USD", "RIL"}
-	return currencies[rand.Intn(len(currencies))]
-}
