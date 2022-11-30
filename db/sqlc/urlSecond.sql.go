@@ -118,7 +118,10 @@ func (q *Queries) ListUrlSeconds(ctx context.Context, arg ListUrlSecondsParams) 
 
 const updateUrlSecond = `-- name: UpdateUrlSecond :one
 UPDATE urlSecond
-set url_hash = $2 AND regex = $3 AND start_index = $4 AND finish_index = $5
+set url_hash     = $2,
+    regex        = $3,
+    start_index  = $4,
+    finish_index = $5
 WHERE id = $1 RETURNING id, url_hash, regex, start_index, finish_index
 `
 
