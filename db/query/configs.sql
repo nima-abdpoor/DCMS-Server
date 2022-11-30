@@ -22,5 +22,5 @@ WHERE id = $1;
 
 -- name: UpdateConfig :one
 UPDATE config
-set is_live = $2 AND sync_type = $3
+set is_live = $2, sync_type = $3
 WHERE id = $1 RETURNING *;
