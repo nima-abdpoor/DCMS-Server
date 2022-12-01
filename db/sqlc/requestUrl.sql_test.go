@@ -40,7 +40,7 @@ func TestQueries_DeleteRequestUrl(t *testing.T) {
 func TestQueries_GetRequestUrl(t *testing.T) {
 	config := createRandomConfig(t)
 	requestUrl := createRandomRequestUrl(t, config)
-	actualRequestUrl, err := testQueries.GetRequestUrl(context.Background(), requestUrl.UniqueID)
+	actualRequestUrl, err := testQueries.GetRequestUrl(context.Background(), requestUrl.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, actualRequestUrl)
 	require.Equal(t, requestUrl.ID, actualRequestUrl.ID)

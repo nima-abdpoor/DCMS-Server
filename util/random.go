@@ -29,8 +29,13 @@ func RandomBoolean() bool {
 	return rand.Intn(2) == 1
 }
 
-func RandomUrlHashGenerator() uint32 {
-	return GenerateCR32(RandomString(int(RandomInt(0, 200))))
+func RandomUrlHashGenerator(n int) []string {
+	var result []string
+	result = make([]string, n)
+	for i := 0; i < n; i++ {
+		result[i] = strconv.Itoa(int(GenerateCR32(RandomString(int(RandomInt(0, 200))))))
+	}
+	return result
 }
 
 // RandomString generates a util string of length n
@@ -42,4 +47,20 @@ func RandomString(n int) string {
 		sb.WriteByte(c)
 	}
 	return sb.String()
+}
+
+// RandomStringList generates a list of strings of length n
+func RandomStringList(n int, length int) []string {
+	var sb strings.Builder
+	k := len(alphabet)
+	var result []string
+	result = make([]string, n)
+	for p := 0; p < length; p++ {
+		for i := 0; i < n; i++ {
+			c := alphabet[rand.Intn(k)]
+			sb.WriteByte(c)
+		}
+		result[p] = sb.String()
+	}
+	return result
 }

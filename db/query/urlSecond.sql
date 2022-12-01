@@ -9,7 +9,7 @@ values ($1, $2, $3, $4, $5) RETURNING *;
 -- name: GetUrlSecond :one
 SELECT *
 FROM urlSecond
-WHERE unique_id = $1 LIMIT 1;
+WHERE id = $1 LIMIT 1;
 
 -- name: ListUrlSeconds :many
 SELECT *

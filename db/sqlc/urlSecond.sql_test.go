@@ -5,14 +5,13 @@ import (
 	"context"
 	"database/sql"
 	"github.com/stretchr/testify/require"
-	"strconv"
 	"testing"
 )
 
 func createRandomUrlSecond(t *testing.T, config Config) Urlsecond {
 	arg := CreateUrlSecondParams{
 		UniqueID:    config.ID,
-		UrlHash:     strconv.Itoa(int(util.RandomUrlHashGenerator())),
+		UrlHash:     util.RandomUrlHashGenerator(1)[0],
 		Regex:       util.RandomString(10),
 		StartIndex:  int32(util.RandomInt(0, 40)),
 		FinishIndex: int32(util.RandomInt(0, 40)),
@@ -50,7 +49,7 @@ func TestQueries_DeleteUrlSecond(t *testing.T) {
 func TestQueries_GetUrlSecond(t *testing.T) {
 	config := createRandomConfig(t)
 	urlSecond := createRandomUrlSecond(t, config)
-	actualUrlSecond, err := testQueries.GetUrlSecond(context.Background(), urlSecond.UniqueID)
+	actualUrlSecond, err := testQueries.GetUrlSecond(context.Background(), urlSecond.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, actualUrlSecond)
 	require.Equal(t, urlSecond.ID, actualUrlSecond.ID)
@@ -83,7 +82,7 @@ func TestQueries_UpdateUrlSecond(t *testing.T) {
 	urlSecond := createRandomUrlSecond(t, config)
 	arg := UpdateUrlSecondParams{
 		UniqueID:    urlSecond.UniqueID,
-		UrlHash:     strconv.Itoa(int(util.RandomUrlHashGenerator())),
+		UrlHash:     util.RandomUrlHashGenerator(1)[0],
 		Regex:       util.RandomString(10),
 		StartIndex:  int32(util.RandomInt(0, 40)),
 		FinishIndex: int32(util.RandomInt(0, 40)),

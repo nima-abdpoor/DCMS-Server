@@ -6,7 +6,7 @@ values ($1, $2) RETURNING *;
 -- name: GetRequestUrl :one
 SELECT *
 FROM requestUrl
-WHERE unique_id = $1 LIMIT 1;
+WHERE id = $1 LIMIT 1;
 
 -- name: ListRequestUrls :many
 SELECT *

@@ -41,11 +41,11 @@ func (q *Queries) DeleteRequestUrl(ctx context.Context, id int64) error {
 const getRequestUrl = `-- name: GetRequestUrl :one
 SELECT id, unique_id, request_url
 FROM requestUrl
-WHERE unique_id = $1 LIMIT 1
+WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetRequestUrl(ctx context.Context, uniqueID int64) (Requesturl, error) {
-	row := q.db.QueryRowContext(ctx, getRequestUrl, uniqueID)
+func (q *Queries) GetRequestUrl(ctx context.Context, id int64) (Requesturl, error) {
+	row := q.db.QueryRowContext(ctx, getRequestUrl, id)
 	var i Requesturl
 	err := row.Scan(&i.ID, &i.UniqueID, &i.RequestUrl)
 	return i, err

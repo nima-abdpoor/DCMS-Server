@@ -46,15 +46,18 @@ type AddConfigTxParams struct {
 	RequestUrl   []string    `json:"requestUrl"`
 }
 
-type TransferTxResult struct {
+type AddConfigTxResult struct {
 	Config     Config       `json:"config"`
 	UrlFirst   []Urlfirst   `json:"urlFirst"`
 	UrlSecond  []Urlsecond  `json:"urlSecond"`
 	RequestUrl []Requesturl `json:"requestUrl"`
 }
 
-func (store store) TransferTx(ctx context.Context, arg AddConfigTxParams) (TransferTxResult, error) {
-	var result TransferTxResult
+func (store store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddConfigTxResult, error) {
+	var result AddConfigTxResult
+	result.UrlFirst = make([]Urlfirst, len(arg.UrlHashFirst))
+	result.UrlSecond = make([]Urlsecond, len(arg.UrlSecond))
+	result.RequestUrl = make([]Requesturl, len(arg.RequestUrl))
 	err := store.execTx(ctx, func(queries *Queries) error {
 		var err error
 		result.Config, err = queries.CreateConfig(ctx, CreateConfigParams{

@@ -5,14 +5,13 @@ import (
 	"context"
 	"database/sql"
 	"github.com/stretchr/testify/require"
-	"strconv"
 	"testing"
 )
 
 func createRandomUrlFirst(t *testing.T, config Config) Urlfirst {
 	arg := CreateUrlFirstParams{
 		UniqueID: config.ID,
-		UrlHash:  strconv.Itoa(int(util.RandomUrlHashGenerator())),
+		UrlHash:  util.RandomUrlHashGenerator(1)[0],
 	}
 	urlFirst, err := testQueries.CreateUrlFirst(context.Background(), arg)
 	require.NoError(t, err)
@@ -71,7 +70,7 @@ func TestQueries_UpdateUrlFirst(t *testing.T) {
 	urlFirst := createRandomUrlFirst(t, config)
 	arg := UpdateUrlFirstParams{
 		UniqueID: urlFirst.UniqueID,
-		UrlHash:  strconv.Itoa(int(util.RandomUrlHashGenerator())),
+		UrlHash:  util.RandomUrlHashGenerator(1)[0],
 	}
 	updatedUrlFirst, err := testQueries.UpdateUrlFirst(context.Background(), arg)
 	require.NoError(t, err)

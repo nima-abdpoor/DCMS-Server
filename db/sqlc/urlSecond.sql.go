@@ -60,11 +60,11 @@ func (q *Queries) DeleteUrlSecond(ctx context.Context, id int64) error {
 const getUrlSecond = `-- name: GetUrlSecond :one
 SELECT id, unique_id, url_hash, regex, start_index, finish_index
 FROM urlSecond
-WHERE unique_id = $1 LIMIT 1
+WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUrlSecond(ctx context.Context, uniqueID int64) (Urlsecond, error) {
-	row := q.db.QueryRowContext(ctx, getUrlSecond, uniqueID)
+func (q *Queries) GetUrlSecond(ctx context.Context, id int64) (Urlsecond, error) {
+	row := q.db.QueryRowContext(ctx, getUrlSecond, id)
 	var i Urlsecond
 	err := row.Scan(
 		&i.ID,
