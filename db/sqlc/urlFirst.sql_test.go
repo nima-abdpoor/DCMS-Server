@@ -11,13 +11,13 @@ import (
 
 func createRandomUrlFirst(t *testing.T, config Config) Urlfirst {
 	arg := CreateUrlFirstParams{
-		ID:      config.ID,
-		UrlHash: strconv.Itoa(int(util.RandomUrlHashGenerator())),
+		UniqueID: config.ID,
+		UrlHash:  strconv.Itoa(int(util.RandomUrlHashGenerator())),
 	}
 	urlFirst, err := testQueries.CreateUrlFirst(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, urlFirst)
-	require.Equal(t, arg.ID, urlFirst.ID)
+	require.Equal(t, arg.UniqueID, config.ID)
 	require.Equal(t, arg.UrlHash, urlFirst.UrlHash)
 	require.NotZero(t, urlFirst.ID)
 	return urlFirst
@@ -70,13 +70,13 @@ func TestQueries_UpdateUrlFirst(t *testing.T) {
 	config := createRandomConfig(t)
 	urlFirst := createRandomUrlFirst(t, config)
 	arg := UpdateUrlFirstParams{
-		ID:      urlFirst.ID,
-		UrlHash: strconv.Itoa(int(util.RandomUrlHashGenerator())),
+		UniqueID: urlFirst.UniqueID,
+		UrlHash:  strconv.Itoa(int(util.RandomUrlHashGenerator())),
 	}
 	updatedUrlFirst, err := testQueries.UpdateUrlFirst(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, updatedUrlFirst)
 	require.Equal(t, urlFirst.ID, updatedUrlFirst.ID)
-	require.Equal(t, arg.ID, updatedUrlFirst.ID)
+	require.Equal(t, arg.UniqueID, updatedUrlFirst.UniqueID)
 	require.Equal(t, arg.UrlHash, updatedUrlFirst.UrlHash)
 }

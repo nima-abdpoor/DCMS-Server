@@ -1,5 +1,5 @@
 -- name: CreateUrlFirst :one
-INSERT INTO urlFirst (id,
+INSERT INTO urlFirst (unique_id,
                       url_hash)
 values ($1, $2) RETURNING *;
 
@@ -22,4 +22,4 @@ WHERE id = $1;
 -- name: UpdateUrlFirst :one
 UPDATE urlFirst
 set url_hash = $2
-WHERE id = $1 RETURNING *;
+WHERE unique_id = $1 RETURNING *;

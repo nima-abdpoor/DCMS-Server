@@ -11,7 +11,7 @@ import (
 
 func createRandomUrlSecond(t *testing.T, config Config) Urlsecond {
 	arg := CreateUrlSecondParams{
-		ID:          config.ID,
+		UniqueID:    config.ID,
 		UrlHash:     strconv.Itoa(int(util.RandomUrlHashGenerator())),
 		Regex:       util.RandomString(10),
 		StartIndex:  int32(util.RandomInt(0, 40)),
@@ -20,7 +20,7 @@ func createRandomUrlSecond(t *testing.T, config Config) Urlsecond {
 	urlSecond, err := testQueries.CreateUrlSecond(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, urlSecond)
-	require.Equal(t, arg.ID, urlSecond.ID)
+	require.Equal(t, arg.UniqueID, config.ID)
 	require.Equal(t, arg.UrlHash, urlSecond.UrlHash)
 	require.Equal(t, arg.Regex, urlSecond.Regex)
 	require.Equal(t, arg.StartIndex, urlSecond.StartIndex)
@@ -30,7 +30,10 @@ func createRandomUrlSecond(t *testing.T, config Config) Urlsecond {
 }
 
 func TestQueries_CreateUrlSecond(t *testing.T) {
-	createRandomUrlSecond(t, createRandomConfig(t))
+	config := createRandomConfig(t)
+	createRandomUrlSecond(t, config)
+	createRandomUrlSecond(t, config)
+	createRandomUrlSecond(t, config)
 }
 
 func TestQueries_DeleteUrlSecond(t *testing.T) {
@@ -47,7 +50,7 @@ func TestQueries_DeleteUrlSecond(t *testing.T) {
 func TestQueries_GetUrlSecond(t *testing.T) {
 	config := createRandomConfig(t)
 	urlSecond := createRandomUrlSecond(t, config)
-	actualUrlSecond, err := testQueries.GetUrlSecond(context.Background(), urlSecond.ID)
+	actualUrlSecond, err := testQueries.GetUrlSecond(context.Background(), urlSecond.UniqueID)
 	require.NoError(t, err)
 	require.NotEmpty(t, actualUrlSecond)
 	require.Equal(t, urlSecond.ID, actualUrlSecond.ID)
@@ -79,7 +82,7 @@ func TestQueries_UpdateUrlSecond(t *testing.T) {
 	config := createRandomConfig(t)
 	urlSecond := createRandomUrlSecond(t, config)
 	arg := UpdateUrlSecondParams{
-		ID:          urlSecond.ID,
+		UniqueID:    urlSecond.UniqueID,
 		UrlHash:     strconv.Itoa(int(util.RandomUrlHashGenerator())),
 		Regex:       util.RandomString(10),
 		StartIndex:  int32(util.RandomInt(0, 40)),
@@ -89,7 +92,7 @@ func TestQueries_UpdateUrlSecond(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, updatedUrlSecond)
 	require.Equal(t, urlSecond.ID, updatedUrlSecond.ID)
-	require.Equal(t, arg.ID, updatedUrlSecond.ID)
+	require.Equal(t, arg.UniqueID, updatedUrlSecond.UniqueID)
 	require.Equal(t, arg.UrlHash, updatedUrlSecond.UrlHash)
 	require.Equal(t, arg.StartIndex, updatedUrlSecond.StartIndex)
 	require.Equal(t, arg.FinishIndex, updatedUrlSecond.FinishIndex)

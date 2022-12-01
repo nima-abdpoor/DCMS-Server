@@ -7,23 +7,26 @@ package db
 import ()
 
 type Config struct {
-	ID       string `json:"id"`
+	ID       int64  `json:"id"`
 	IsLive   bool   `json:"is_live"`
 	SyncType string `json:"sync_type"`
 }
 
 type Requesturl struct {
-	ID         string `json:"id"`
+	ID         int64  `json:"id"`
+	UniqueID   int64  `json:"unique_id"`
 	RequestUrl string `json:"request_url"`
 }
 
 type Urlfirst struct {
-	ID      string `json:"id"`
-	UrlHash string `json:"url_hash"`
+	ID       int64  `json:"id"`
+	UniqueID int64  `json:"unique_id"`
+	UrlHash  string `json:"url_hash"`
 }
 
 type Urlsecond struct {
-	ID          string `json:"id"`
+	ID          int64  `json:"id"`
+	UniqueID    int64  `json:"unique_id"`
 	UrlHash     string `json:"url_hash"`
 	Regex       string `json:"regex"`
 	StartIndex  int32  `json:"start_index"`

@@ -17,7 +17,7 @@ values ($1, $2, $3) RETURNING id, is_live, sync_type
 `
 
 type CreateConfigParams struct {
-	ID       string `json:"id"`
+	ID       int64  `json:"id"`
 	SyncType string `json:"sync_type"`
 	IsLive   bool   `json:"is_live"`
 }
@@ -35,7 +35,7 @@ FROM config
 WHERE id = $1
 `
 
-func (q *Queries) DeleteConfig(ctx context.Context, id string) error {
+func (q *Queries) DeleteConfig(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteConfig, id)
 	return err
 }
@@ -46,7 +46,7 @@ FROM config
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetConfig(ctx context.Context, id string) (Config, error) {
+func (q *Queries) GetConfig(ctx context.Context, id int64) (Config, error) {
 	row := q.db.QueryRowContext(ctx, getConfig, id)
 	var i Config
 	err := row.Scan(&i.ID, &i.IsLive, &i.SyncType)
@@ -90,12 +90,12 @@ func (q *Queries) ListConfigs(ctx context.Context, arg ListConfigsParams) ([]Con
 
 const updateConfig = `-- name: UpdateConfig :one
 UPDATE config
-set is_live = $2 AND sync_type = $3
+set is_live = $2, sync_type = $3
 WHERE id = $1 RETURNING id, is_live, sync_type
 `
 
 type UpdateConfigParams struct {
-	ID       string `json:"id"`
+	ID       int64  `json:"id"`
 	IsLive   bool   `json:"is_live"`
 	SyncType string `json:"sync_type"`
 }

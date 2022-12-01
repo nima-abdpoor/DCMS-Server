@@ -5,13 +5,12 @@ import (
 	"context"
 	"database/sql"
 	"github.com/stretchr/testify/require"
-	"strconv"
 	"testing"
 )
 
 func createRandomConfig(t *testing.T) Config {
 	arg := CreateConfigParams{
-		ID:       strconv.Itoa(int(util.RandomInt(1, 1000000))),
+		ID:       util.RandomInt(1, 1000000),
 		SyncType: util.RandomSyncType(),
 		IsLive:   util.RandomBoolean(),
 	}

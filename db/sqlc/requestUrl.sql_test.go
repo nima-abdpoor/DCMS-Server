@@ -10,13 +10,13 @@ import (
 
 func createRandomRequestUrl(t *testing.T, config Config) Requesturl {
 	arg := CreateRequestUrlParams{
-		ID:         config.ID,
+		UniqueID:   config.ID,
 		RequestUrl: util.RandomString(100),
 	}
 	requestUrl, err := testQueries.CreateRequestUrl(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, requestUrl)
-	require.Equal(t, arg.ID, requestUrl.ID)
+	require.Equal(t, arg.UniqueID, config.ID)
 	require.Equal(t, arg.RequestUrl, requestUrl.RequestUrl)
 	require.NotZero(t, requestUrl.ID)
 	return requestUrl
@@ -40,7 +40,7 @@ func TestQueries_DeleteRequestUrl(t *testing.T) {
 func TestQueries_GetRequestUrl(t *testing.T) {
 	config := createRandomConfig(t)
 	requestUrl := createRandomRequestUrl(t, config)
-	actualRequestUrl, err := testQueries.GetRequestUrl(context.Background(), requestUrl.ID)
+	actualRequestUrl, err := testQueries.GetRequestUrl(context.Background(), requestUrl.UniqueID)
 	require.NoError(t, err)
 	require.NotEmpty(t, actualRequestUrl)
 	require.Equal(t, requestUrl.ID, actualRequestUrl.ID)
@@ -69,13 +69,13 @@ func TestQueries_UpdateRequestUrl(t *testing.T) {
 	config := createRandomConfig(t)
 	requestUrl := createRandomRequestUrl(t, config)
 	arg := UpdateRequestUrlParams{
-		ID:         requestUrl.ID,
+		UniqueID:   config.ID,
 		RequestUrl: util.RandomString(100),
 	}
 	updatedRequestUrl, err := testQueries.UpdateRequestUrl(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, updatedRequestUrl)
 	require.Equal(t, requestUrl.ID, updatedRequestUrl.ID)
-	require.Equal(t, arg.ID, updatedRequestUrl.ID)
+	require.Equal(t, arg.UniqueID, updatedRequestUrl.UniqueID)
 	require.Equal(t, arg.RequestUrl, updatedRequestUrl.RequestUrl)
 }

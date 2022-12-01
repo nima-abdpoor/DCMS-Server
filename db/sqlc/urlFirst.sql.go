@@ -10,20 +10,20 @@ import (
 )
 
 const createUrlFirst = `-- name: CreateUrlFirst :one
-INSERT INTO urlFirst (id,
+INSERT INTO urlFirst (unique_id,
                       url_hash)
-values ($1, $2) RETURNING id, url_hash
+values ($1, $2) RETURNING id, unique_id, url_hash
 `
 
 type CreateUrlFirstParams struct {
-	ID      string `json:"id"`
-	UrlHash string `json:"url_hash"`
+	UniqueID int64  `json:"unique_id"`
+	UrlHash  string `json:"url_hash"`
 }
 
 func (q *Queries) CreateUrlFirst(ctx context.Context, arg CreateUrlFirstParams) (Urlfirst, error) {
-	row := q.db.QueryRowContext(ctx, createUrlFirst, arg.ID, arg.UrlHash)
+	row := q.db.QueryRowContext(ctx, createUrlFirst, arg.UniqueID, arg.UrlHash)
 	var i Urlfirst
-	err := row.Scan(&i.ID, &i.UrlHash)
+	err := row.Scan(&i.ID, &i.UniqueID, &i.UrlHash)
 	return i, err
 }
 
@@ -33,26 +33,26 @@ FROM urlFirst
 WHERE id = $1
 `
 
-func (q *Queries) DeleteUrlFirst(ctx context.Context, id string) error {
+func (q *Queries) DeleteUrlFirst(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteUrlFirst, id)
 	return err
 }
 
 const getUrlFirst = `-- name: GetUrlFirst :one
-SELECT id, url_hash
+SELECT id, unique_id, url_hash
 FROM urlFirst
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUrlFirst(ctx context.Context, id string) (Urlfirst, error) {
+func (q *Queries) GetUrlFirst(ctx context.Context, id int64) (Urlfirst, error) {
 	row := q.db.QueryRowContext(ctx, getUrlFirst, id)
 	var i Urlfirst
-	err := row.Scan(&i.ID, &i.UrlHash)
+	err := row.Scan(&i.ID, &i.UniqueID, &i.UrlHash)
 	return i, err
 }
 
 const listUrlFirsts = `-- name: ListUrlFirsts :many
-SELECT id, url_hash
+SELECT id, unique_id, url_hash
 FROM urlFirst
 ORDER BY id LIMIT $1
 OFFSET $2
@@ -72,7 +72,7 @@ func (q *Queries) ListUrlFirsts(ctx context.Context, arg ListUrlFirstsParams) ([
 	var items []Urlfirst
 	for rows.Next() {
 		var i Urlfirst
-		if err := rows.Scan(&i.ID, &i.UrlHash); err != nil {
+		if err := rows.Scan(&i.ID, &i.UniqueID, &i.UrlHash); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -89,17 +89,17 @@ func (q *Queries) ListUrlFirsts(ctx context.Context, arg ListUrlFirstsParams) ([
 const updateUrlFirst = `-- name: UpdateUrlFirst :one
 UPDATE urlFirst
 set url_hash = $2
-WHERE id = $1 RETURNING id, url_hash
+WHERE unique_id = $1 RETURNING id, unique_id, url_hash
 `
 
 type UpdateUrlFirstParams struct {
-	ID      string `json:"id"`
-	UrlHash string `json:"url_hash"`
+	UniqueID int64  `json:"unique_id"`
+	UrlHash  string `json:"url_hash"`
 }
 
 func (q *Queries) UpdateUrlFirst(ctx context.Context, arg UpdateUrlFirstParams) (Urlfirst, error) {
-	row := q.db.QueryRowContext(ctx, updateUrlFirst, arg.ID, arg.UrlHash)
+	row := q.db.QueryRowContext(ctx, updateUrlFirst, arg.UniqueID, arg.UrlHash)
 	var i Urlfirst
-	err := row.Scan(&i.ID, &i.UrlHash)
+	err := row.Scan(&i.ID, &i.UniqueID, &i.UrlHash)
 	return i, err
 }
