@@ -6,20 +6,20 @@ import (
 	"fmt"
 )
 
-type store struct {
+type Store struct {
 	q  *Queries
 	db *sql.DB
 }
 
-func newStore(db *sql.DB) *store {
-	return &store{
+func newStore(db *sql.DB) *Store {
+	return &Store{
 		q:  New(db),
 		db: db,
 	}
 }
 
 // execute a function within a database transaction.
-func (store *store) execTx(ctx context.Context, fn func(queries *Queries) error) error {
+func (store *Store) execTx(ctx context.Context, fn func(queries *Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -53,7 +53,7 @@ type AddConfigTxResult struct {
 	RequestUrl []Requesturl `json:"requestUrl"`
 }
 
-func (store store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddConfigTxResult, error) {
+func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddConfigTxResult, error) {
 	var result AddConfigTxResult
 	result.UrlFirst = make([]Urlfirst, len(arg.UrlHashFirst))
 	result.UrlSecond = make([]Urlsecond, len(arg.UrlSecond))

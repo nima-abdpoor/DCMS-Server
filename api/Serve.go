@@ -1,15 +1,18 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	db "DCMS/db/sqlc"
+	"github.com/gin-gonic/gin"
+)
 
 type Server struct {
-	//store *db.Store
+	store  *db.Store
 	router *gin.Engine
 }
 
-func NewServer() *Server {
+func NewServer(store *db.Store) *Server {
 
-	server := &Server{}
+	server := &Server{store: store}
 	router := gin.Default()
 	router.POST("/config", server.getConfig)
 	server.router = router
