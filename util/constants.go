@@ -6,3 +6,5 @@ const (
 	Medium  = "2"
 	High    = "3"
 )
+
+const DefaultConfigId = 0

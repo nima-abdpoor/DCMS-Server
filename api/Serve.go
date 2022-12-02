@@ -11,13 +11,14 @@ type Server struct {
 }
 
 func NewServer(store *db.Store) *Server {
-
 	server := &Server{store: store}
 	router := gin.Default()
-	router.POST("/config", server.getConfig)
+	router.GET("/config/:id", server.getConfig)
+	router.GET("/config", server.getDefaultConfig)
 	server.router = router
 	return server
 }
+
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }

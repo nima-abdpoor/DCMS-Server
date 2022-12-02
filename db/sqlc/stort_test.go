@@ -11,7 +11,7 @@ func addConfigTx(t *testing.T) AddConfigTxResult {
 	numberOfUrlFirst := 1
 	numberOfUrlSecond := 1
 	numberOfRequestUrl := 1
-	store := newStore(testDB)
+	store := NewStore(testDB)
 	config := createRandomConfig(t)
 	var urlSeconds []Urlsecond
 	urlSeconds = make([]Urlsecond, numberOfUrlSecond)
@@ -94,7 +94,7 @@ func TestStore_AddConfigTx(t *testing.T) {
 
 func TestStore_GetConfigTx(t *testing.T) {
 	addConfigTxResult := addConfigTx(t)
-	store := newStore(testDB)
+	store := NewStore(testDB)
 	result, err := store.GetConfigTx(context.Background(), GetConfigTxParams{addConfigTxResult.Config.ID})
 	require.NoError(t, err)
 	require.NotEmpty(t, result)

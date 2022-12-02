@@ -1,6 +1,10 @@
 package api
 
 import (
+	db "DCMS/db/sqlc"
+	"DCMS/util"
+	"context"
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -19,31 +23,39 @@ type UrlIdSecond struct {
 	StartIndex  int32  `json:"startIndex"`
 	FinishIndex int32  `json:"finishIndex"`
 }
-
-func (server *Server) getConfig(ctx *gin.Context) {
-	var response = getConfigSampleResponse()
-	ctx.JSON(http.StatusOK, response)
+type getConfigRequest struct {
+	ID int64 `uri:"id" binding:"required"`
 }
 
-func getConfigSampleResponse() ConfigResponse {
-	return ConfigResponse{
-		RequestUrls: []string{"http://192.168.1.111:8080", "http://192.168.43.145:8080"},
-		UrlIdFirst:  []int64{1254444, 258774111},
-		UrlIdSecond: []UrlIdSecond{
-			{
-				UrlId:       125477,
-				Regex:       "aksdlfja",
-				StartIndex:  0,
-				FinishIndex: 1,
-			},
-			{
-				UrlId:       158777,
-				Regex:       "askldjf",
-				StartIndex:  10,
-				FinishIndex: 22,
-			},
-		},
-		IsLive:   false,
-		SyncType: "1",
+func (server *Server) getConfig(ctx *gin.Context) {
+	var req getConfigRequest
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
 	}
+	if req.ID <= 10 {
+		ctx.JSON(http.StatusForbidden, "This ID Is Reserved")
+		return
+	}
+	result, err := server.store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: req.ID})
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+	}
+	ctx.JSON(http.StatusOK, result)
+}
+
+func (server *Server) getDefaultConfig(ctx *gin.Context) {
+	configResult, err := server.store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: util.DefaultConfigId})
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+	}
+	ctx.JSON(http.StatusOK, configResult)
 }
