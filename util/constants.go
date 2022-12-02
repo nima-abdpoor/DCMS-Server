@@ -7,4 +7,4 @@ const (
 	High    = "3"
 )
 
-const DefaultConfigId = 0
+const DefaultConfigId = 1
