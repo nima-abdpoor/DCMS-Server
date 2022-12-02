@@ -8,6 +8,11 @@ SELECT *
 FROM requestUrl
 WHERE id = $1 LIMIT 1;
 
+-- name: GetRequestUrlByUniqueId :many
+SELECT *
+FROM requestUrl
+WHERE unique_id = $1;
+
 -- name: ListRequestUrls :many
 SELECT *
 FROM requestUrl

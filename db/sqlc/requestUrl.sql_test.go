@@ -79,3 +79,22 @@ func TestQueries_UpdateRequestUrl(t *testing.T) {
 	require.Equal(t, arg.UniqueID, updatedRequestUrl.UniqueID)
 	require.Equal(t, arg.RequestUrl, updatedRequestUrl.RequestUrl)
 }
+
+func TestQueries_GetRequestUrlByUniqueId(t *testing.T) {
+	config := createRandomConfig(t)
+	var requestUrls []Requesturl
+	numberOfRequestUrl := 10
+	for i := 0; i < numberOfRequestUrl; i++ {
+		requestUrls = append(requestUrls, createRandomRequestUrl(t, config))
+	}
+	require.Equal(t, numberOfRequestUrl, len(requestUrls))
+	require.NotEmpty(t, requestUrls)
+	actualRequestUrl, err := testQueries.GetRequestUrlByUniqueId(context.Background(), config.ID)
+	require.NoError(t, err)
+	for i, url := range requestUrls {
+		require.Equal(t, config.ID, url.UniqueID)
+		require.Equal(t, config.ID, actualRequestUrl[i].UniqueID)
+		require.Equal(t, requestUrls[i].UniqueID, actualRequestUrl[i].UniqueID)
+		require.Equal(t, requestUrls[i].RequestUrl, actualRequestUrl[i].RequestUrl)
+	}
+}

@@ -79,3 +79,21 @@ func TestQueries_UpdateUrlFirst(t *testing.T) {
 	require.Equal(t, arg.UniqueID, updatedUrlFirst.UniqueID)
 	require.Equal(t, arg.UrlHash, updatedUrlFirst.UrlHash)
 }
+
+func TestQueries_GetUrlFirstByUniqueId(t *testing.T) {
+	config := createRandomConfig(t)
+	var urlFirsts []Urlfirst
+	numberOfUrlFirst := 10
+	for i := 0; i < numberOfUrlFirst; i++ {
+		urlFirsts = append(urlFirsts, createRandomUrlFirst(t, config))
+	}
+	require.Equal(t, numberOfUrlFirst, len(urlFirsts))
+	require.NotEmpty(t, urlFirsts)
+	actualUrlFirsts, err := testQueries.GetUrlFirstByUniqueId(context.Background(), config.ID)
+	require.NoError(t, err)
+	for i, url := range urlFirsts {
+		require.Equal(t, config.ID, url.UniqueID)
+		require.Equal(t, config.ID, actualUrlFirsts[i].UniqueID)
+		require.Equal(t, urlFirsts[i].UrlHash, actualUrlFirsts[i].UrlHash)
+	}
+}

@@ -51,6 +51,35 @@ func (q *Queries) GetUrlFirst(ctx context.Context, id int64) (Urlfirst, error) {
 	return i, err
 }
 
+const getUrlFirstByUniqueId = `-- name: GetUrlFirstByUniqueId :many
+SELECT id, unique_id, url_hash
+FROM urlFirst
+WHERE unique_id = $1
+`
+
+func (q *Queries) GetUrlFirstByUniqueId(ctx context.Context, uniqueID int64) ([]Urlfirst, error) {
+	rows, err := q.db.QueryContext(ctx, getUrlFirstByUniqueId, uniqueID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Urlfirst
+	for rows.Next() {
+		var i Urlfirst
+		if err := rows.Scan(&i.ID, &i.UniqueID, &i.UrlHash); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listUrlFirsts = `-- name: ListUrlFirsts :many
 SELECT id, unique_id, url_hash
 FROM urlFirst

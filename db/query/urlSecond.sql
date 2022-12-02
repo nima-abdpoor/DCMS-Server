@@ -11,6 +11,11 @@ SELECT *
 FROM urlSecond
 WHERE id = $1 LIMIT 1;
 
+-- name: GetUrlSecondByUniqueId :many
+SELECT *
+FROM urlSecond
+WHERE unique_id = $1;
+
 -- name: ListUrlSeconds :many
 SELECT *
 FROM urlSecond

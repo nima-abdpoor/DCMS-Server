@@ -77,6 +77,42 @@ func (q *Queries) GetUrlSecond(ctx context.Context, id int64) (Urlsecond, error)
 	return i, err
 }
 
+const getUrlSecondByUniqueId = `-- name: GetUrlSecondByUniqueId :many
+SELECT id, unique_id, url_hash, regex, start_index, finish_index
+FROM urlSecond
+WHERE unique_id = $1
+`
+
+func (q *Queries) GetUrlSecondByUniqueId(ctx context.Context, uniqueID int64) ([]Urlsecond, error) {
+	rows, err := q.db.QueryContext(ctx, getUrlSecondByUniqueId, uniqueID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Urlsecond
+	for rows.Next() {
+		var i Urlsecond
+		if err := rows.Scan(
+			&i.ID,
+			&i.UniqueID,
+			&i.UrlHash,
+			&i.Regex,
+			&i.StartIndex,
+			&i.FinishIndex,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listUrlSeconds = `-- name: ListUrlSeconds :many
 SELECT id, unique_id, url_hash, regex, start_index, finish_index
 FROM urlSecond

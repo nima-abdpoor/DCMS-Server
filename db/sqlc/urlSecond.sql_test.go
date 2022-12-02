@@ -97,3 +97,24 @@ func TestQueries_UpdateUrlSecond(t *testing.T) {
 	require.Equal(t, arg.FinishIndex, updatedUrlSecond.FinishIndex)
 	require.Equal(t, arg.Regex, updatedUrlSecond.Regex)
 }
+
+func TestQueries_GetUrlSecondByUniqueId(t *testing.T) {
+	config := createRandomConfig(t)
+	var urlSeconds []Urlsecond
+	numberOfUrlSecond := 10
+	for i := 0; i < numberOfUrlSecond; i++ {
+		urlSeconds = append(urlSeconds, createRandomUrlSecond(t, config))
+	}
+	require.Equal(t, numberOfUrlSecond, len(urlSeconds))
+	require.NotEmpty(t, urlSeconds)
+	actualUrlSeconds, err := testQueries.GetUrlSecondByUniqueId(context.Background(), config.ID)
+	require.NoError(t, err)
+	for i, url := range urlSeconds {
+		require.Equal(t, config.ID, url.UniqueID)
+		require.Equal(t, config.ID, actualUrlSeconds[i].UniqueID)
+		require.Equal(t, urlSeconds[i].UrlHash, actualUrlSeconds[i].UrlHash)
+		require.Equal(t, urlSeconds[i].Regex, actualUrlSeconds[i].Regex)
+		require.Equal(t, urlSeconds[i].StartIndex, actualUrlSeconds[i].StartIndex)
+		require.Equal(t, urlSeconds[i].FinishIndex, actualUrlSeconds[i].FinishIndex)
+	}
+}

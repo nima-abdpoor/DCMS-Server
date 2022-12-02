@@ -51,6 +51,35 @@ func (q *Queries) GetRequestUrl(ctx context.Context, id int64) (Requesturl, erro
 	return i, err
 }
 
+const getRequestUrlByUniqueId = `-- name: GetRequestUrlByUniqueId :many
+SELECT id, unique_id, request_url
+FROM requestUrl
+WHERE unique_id = $1
+`
+
+func (q *Queries) GetRequestUrlByUniqueId(ctx context.Context, uniqueID int64) ([]Requesturl, error) {
+	rows, err := q.db.QueryContext(ctx, getRequestUrlByUniqueId, uniqueID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Requesturl
+	for rows.Next() {
+		var i Requesturl
+		if err := rows.Scan(&i.ID, &i.UniqueID, &i.RequestUrl); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listRequestUrls = `-- name: ListRequestUrls :many
 SELECT id, unique_id, request_url
 FROM requestUrl
