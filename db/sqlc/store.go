@@ -108,12 +108,7 @@ func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddC
 }
 
 type GetConfigTxParams struct {
-	ID           int64       `json:"id"`
-	SyncType     string      `json:"sync_type"`
-	IsLive       bool        `json:"is_live"`
-	UrlHashFirst []string    `json:"urlHashFirst"`
-	UrlSecond    []Urlsecond `json:"urlSecond"`
-	RequestUrl   []string    `json:"requestUrl"`
+	ID int64 `json:"id"`
 }
 
 type GetConfigTxResult struct {

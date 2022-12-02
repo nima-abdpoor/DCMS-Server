@@ -3,12 +3,11 @@ package db
 import (
 	"DCMS/util"
 	"context"
-	"fmt"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestStore_AddConfigTx(t *testing.T) {
+func addConfigTx(t *testing.T) AddConfigTxResult {
 	numberOfUrlFirst := 1
 	numberOfUrlSecond := 1
 	numberOfRequestUrl := 1
@@ -59,10 +58,7 @@ func TestStore_AddConfigTx(t *testing.T) {
 
 	//check the UrlSecond
 	require.NotEmpty(t, result.UrlSecond)
-	fmt.Println(result.UrlSecond)
 	for i, urlSecond := range result.UrlSecond {
-		fmt.Println(i, urlSecond)
-		fmt.Println(i, arg.UrlSecond[i])
 		require.Equal(t, arg.ID, urlSecond.UniqueID)
 		require.Equal(t, arg.UrlSecond[i].UrlHash, urlSecond.UrlHash)
 		require.Equal(t, arg.ID, urlSecond.UniqueID)
@@ -88,5 +84,47 @@ func TestStore_AddConfigTx(t *testing.T) {
 		require.Equal(t, requestUrl.ID, actualRequestUrl.ID)
 		require.Equal(t, requestUrl.UniqueID, actualRequestUrl.UniqueID)
 		require.Equal(t, requestUrl.RequestUrl, actualRequestUrl.RequestUrl)
+	}
+	return result
+}
+
+func TestStore_AddConfigTx(t *testing.T) {
+	addConfigTx(t)
+}
+
+func TestStore_GetConfigTx(t *testing.T) {
+	addConfigTxResult := addConfigTx(t)
+	store := newStore(testDB)
+	result, err := store.GetConfigTx(context.Background(), GetConfigTxParams{addConfigTxResult.Config.ID})
+	require.NoError(t, err)
+	require.NotEmpty(t, result)
+
+	//test config
+	require.Equal(t, addConfigTxResult.Config.ID, result.Config.ID)
+	require.Equal(t, addConfigTxResult.Config.IsLive, result.Config.IsLive)
+	require.Equal(t, addConfigTxResult.Config.SyncType, result.Config.SyncType)
+
+	//test UrlFirst
+	for i, urlFirst := range addConfigTxResult.UrlFirst {
+		require.Equal(t, urlFirst.ID, result.UrlFirst[i].ID)
+		require.Equal(t, urlFirst.UrlHash, result.UrlFirst[i].UrlHash)
+		require.Equal(t, urlFirst.UniqueID, result.UrlFirst[i].UniqueID)
+	}
+
+	//test UrlSecond
+	for i, urlSecond := range addConfigTxResult.UrlSecond {
+		require.Equal(t, urlSecond.ID, result.UrlSecond[i].ID)
+		require.Equal(t, urlSecond.UrlHash, result.UrlSecond[i].UrlHash)
+		require.Equal(t, urlSecond.UniqueID, result.UrlSecond[i].UniqueID)
+		require.Equal(t, urlSecond.Regex, result.UrlSecond[i].Regex)
+		require.Equal(t, urlSecond.StartIndex, result.UrlSecond[i].StartIndex)
+		require.Equal(t, urlSecond.FinishIndex, result.UrlSecond[i].FinishIndex)
+	}
+
+	//test RequestUrl
+	for i, requestUrl := range addConfigTxResult.RequestUrl {
+		require.Equal(t, requestUrl.ID, result.RequestUrl[i].ID)
+		require.Equal(t, requestUrl.RequestUrl, result.RequestUrl[i].RequestUrl)
+		require.Equal(t, requestUrl.UniqueID, result.RequestUrl[i].UniqueID)
 	}
 }
