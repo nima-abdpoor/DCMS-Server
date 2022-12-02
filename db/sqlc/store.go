@@ -106,3 +106,47 @@ func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddC
 	})
 	return result, err
 }
+
+type GetConfigTxParams struct {
+	ID           int64       `json:"id"`
+	SyncType     string      `json:"sync_type"`
+	IsLive       bool        `json:"is_live"`
+	UrlHashFirst []string    `json:"urlHashFirst"`
+	UrlSecond    []Urlsecond `json:"urlSecond"`
+	RequestUrl   []string    `json:"requestUrl"`
+}
+
+type GetConfigTxResult struct {
+	Config     Config       `json:"config"`
+	UrlFirst   []Urlfirst   `json:"urlFirst"`
+	UrlSecond  []Urlsecond  `json:"urlSecond"`
+	RequestUrl []Requesturl `json:"requestUrl"`
+}
+
+func (store Store) GetConfigTx(ctx context.Context, arg GetConfigTxParams) (GetConfigTxResult, error) {
+	var result GetConfigTxResult
+	err := store.execTx(ctx, func(queries *Queries) error {
+		var err error
+		result.Config, err = queries.GetConfig(ctx, arg.ID)
+		if err != nil {
+			return err
+		}
+
+		result.UrlFirst, err = queries.GetUrlFirstByUniqueId(ctx, arg.ID)
+		if err != nil {
+			return err
+		}
+
+		result.UrlSecond, err = queries.GetUrlSecondByUniqueId(ctx, arg.ID)
+		if err != nil {
+			return err
+		}
+
+		result.RequestUrl, err = queries.GetRequestUrlByUniqueId(context.Background(), arg.ID)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	return result, err
+}
