@@ -70,7 +70,7 @@ type PostConfig struct {
 }
 
 type UrlSecond struct {
-	UrlHash     string `form:"urlHashFirst" json:"urlHashFirst" binding:"required"`
+	UrlHash     string `form:"url_hash" json:"url_hash" binding:"required"`
 	Regex       string `form:"regex" json:"regex" binding:"required"`
 	StartIndex  int32  `form:"start_index" json:"start_index" binding:"required"`
 	FinishIndex int32  `form:"finish_index" json:"finish_index" binding:"required"`
