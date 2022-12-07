@@ -1,10 +1,7 @@
 -- name: CreateUrlSecond :one
 INSERT INTO urlSecond (unique_id,
-                       url_hash,
-                       regex,
-                       start_index,
-                       finish_index)
-values ($1, $2, $3, $4, $5) RETURNING *;
+                       url_hash)
+values ($1, $2) RETURNING *;
 
 -- name: GetUrlSecond :one
 SELECT *
@@ -29,8 +26,5 @@ WHERE id = $1;
 
 -- name: UpdateUrlSecond :one
 UPDATE urlSecond
-set url_hash     = $2,
-    regex        = $3,
-    start_index  = $4,
-    finish_index = $5
+set url_hash = $2
 WHERE unique_id = $1 RETURNING *;
