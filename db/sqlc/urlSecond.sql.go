@@ -11,38 +11,19 @@ import (
 
 const createUrlSecond = `-- name: CreateUrlSecond :one
 INSERT INTO urlSecond (unique_id,
-                       url_hash,
-                       regex,
-                       start_index,
-                       finish_index)
-values ($1, $2, $3, $4, $5) RETURNING id, unique_id, url_hash, regex, start_index, finish_index
+                       url_hash)
+values ($1, $2) RETURNING id, unique_id, url_hash
 `
 
 type CreateUrlSecondParams struct {
-	UniqueID    int64  `json:"unique_id"`
-	UrlHash     string `json:"url_hash"`
-	Regex       string `json:"regex"`
-	StartIndex  int32  `json:"start_index"`
-	FinishIndex int32  `json:"finish_index"`
+	UniqueID int64  `json:"unique_id"`
+	UrlHash  string `json:"url_hash"`
 }
 
 func (q *Queries) CreateUrlSecond(ctx context.Context, arg CreateUrlSecondParams) (Urlsecond, error) {
-	row := q.db.QueryRowContext(ctx, createUrlSecond,
-		arg.UniqueID,
-		arg.UrlHash,
-		arg.Regex,
-		arg.StartIndex,
-		arg.FinishIndex,
-	)
+	row := q.db.QueryRowContext(ctx, createUrlSecond, arg.UniqueID, arg.UrlHash)
 	var i Urlsecond
-	err := row.Scan(
-		&i.ID,
-		&i.UniqueID,
-		&i.UrlHash,
-		&i.Regex,
-		&i.StartIndex,
-		&i.FinishIndex,
-	)
+	err := row.Scan(&i.ID, &i.UniqueID, &i.UrlHash)
 	return i, err
 }
 
@@ -58,7 +39,7 @@ func (q *Queries) DeleteUrlSecond(ctx context.Context, id int64) error {
 }
 
 const getUrlSecond = `-- name: GetUrlSecond :one
-SELECT id, unique_id, url_hash, regex, start_index, finish_index
+SELECT id, unique_id, url_hash
 FROM urlSecond
 WHERE id = $1 LIMIT 1
 `
@@ -66,19 +47,12 @@ WHERE id = $1 LIMIT 1
 func (q *Queries) GetUrlSecond(ctx context.Context, id int64) (Urlsecond, error) {
 	row := q.db.QueryRowContext(ctx, getUrlSecond, id)
 	var i Urlsecond
-	err := row.Scan(
-		&i.ID,
-		&i.UniqueID,
-		&i.UrlHash,
-		&i.Regex,
-		&i.StartIndex,
-		&i.FinishIndex,
-	)
+	err := row.Scan(&i.ID, &i.UniqueID, &i.UrlHash)
 	return i, err
 }
 
 const getUrlSecondByUniqueId = `-- name: GetUrlSecondByUniqueId :many
-SELECT id, unique_id, url_hash, regex, start_index, finish_index
+SELECT id, unique_id, url_hash
 FROM urlSecond
 WHERE unique_id = $1
 `
@@ -92,14 +66,7 @@ func (q *Queries) GetUrlSecondByUniqueId(ctx context.Context, uniqueID int64) ([
 	var items []Urlsecond
 	for rows.Next() {
 		var i Urlsecond
-		if err := rows.Scan(
-			&i.ID,
-			&i.UniqueID,
-			&i.UrlHash,
-			&i.Regex,
-			&i.StartIndex,
-			&i.FinishIndex,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.UniqueID, &i.UrlHash); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -114,7 +81,7 @@ func (q *Queries) GetUrlSecondByUniqueId(ctx context.Context, uniqueID int64) ([
 }
 
 const listUrlSeconds = `-- name: ListUrlSeconds :many
-SELECT id, unique_id, url_hash, regex, start_index, finish_index
+SELECT id, unique_id, url_hash
 FROM urlSecond
 ORDER BY unique_id LIMIT $1
 OFFSET $2
@@ -134,14 +101,7 @@ func (q *Queries) ListUrlSeconds(ctx context.Context, arg ListUrlSecondsParams) 
 	var items []Urlsecond
 	for rows.Next() {
 		var i Urlsecond
-		if err := rows.Scan(
-			&i.ID,
-			&i.UniqueID,
-			&i.UrlHash,
-			&i.Regex,
-			&i.StartIndex,
-			&i.FinishIndex,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.UniqueID, &i.UrlHash); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -157,37 +117,18 @@ func (q *Queries) ListUrlSeconds(ctx context.Context, arg ListUrlSecondsParams) 
 
 const updateUrlSecond = `-- name: UpdateUrlSecond :one
 UPDATE urlSecond
-set url_hash     = $2,
-    regex        = $3,
-    start_index  = $4,
-    finish_index = $5
-WHERE unique_id = $1 RETURNING id, unique_id, url_hash, regex, start_index, finish_index
+set url_hash = $2
+WHERE unique_id = $1 RETURNING id, unique_id, url_hash
 `
 
 type UpdateUrlSecondParams struct {
-	UniqueID    int64  `json:"unique_id"`
-	UrlHash     string `json:"url_hash"`
-	Regex       string `json:"regex"`
-	StartIndex  int32  `json:"start_index"`
-	FinishIndex int32  `json:"finish_index"`
+	UniqueID int64  `json:"unique_id"`
+	UrlHash  string `json:"url_hash"`
 }
 
 func (q *Queries) UpdateUrlSecond(ctx context.Context, arg UpdateUrlSecondParams) (Urlsecond, error) {
-	row := q.db.QueryRowContext(ctx, updateUrlSecond,
-		arg.UniqueID,
-		arg.UrlHash,
-		arg.Regex,
-		arg.StartIndex,
-		arg.FinishIndex,
-	)
+	row := q.db.QueryRowContext(ctx, updateUrlSecond, arg.UniqueID, arg.UrlHash)
 	var i Urlsecond
-	err := row.Scan(
-		&i.ID,
-		&i.UniqueID,
-		&i.UrlHash,
-		&i.Regex,
-		&i.StartIndex,
-		&i.FinishIndex,
-	)
+	err := row.Scan(&i.ID, &i.UniqueID, &i.UrlHash)
 	return i, err
 }
