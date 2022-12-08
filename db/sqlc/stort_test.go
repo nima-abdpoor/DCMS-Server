@@ -8,15 +8,26 @@ import (
 )
 
 func addConfigTx(t *testing.T) AddConfigTxResult {
-	numberOfUrlFirst := 1
-	numberOfUrlSecond := 1
-	numberOfRequestUrl := 1
+	numberOfUrlFirst := 4
+	numberOfUrlSecond := 2
+	numberOfRegexes := 5
+	numberOfRequestUrl := 3
 	store := NewStore(testDB)
 	config := createRandomConfig(t)
-	var urlSeconds []Urlsecond
-	urlSeconds = make([]Urlsecond, numberOfUrlSecond)
+	var urlSeconds []UrlSecondTx
+	urlSeconds = make([]UrlSecondTx, numberOfUrlSecond)
+	var regexes []Regex
 	for i := 0; i < numberOfUrlSecond; i++ {
-		urlSeconds[i] = createRandomUrlSecond(t, config)
+		second := createRandomUrlSecond(t, config)
+		for j := 0; j < numberOfRegexes; j++ {
+			regexes = append(regexes, createRandomRegex(t, second))
+		}
+		urlSeconds[i] = UrlSecondTx{
+			ID:       second.ID,
+			UniqueID: second.UniqueID,
+			UrlHash:  second.UrlHash,
+			Regex:    regexes,
+		}
 	}
 	arg := AddConfigTxParams{
 		ID:           util.RandomInt(0, 10000),
@@ -62,16 +73,20 @@ func addConfigTx(t *testing.T) AddConfigTxResult {
 		require.Equal(t, arg.ID, urlSecond.UniqueID)
 		require.Equal(t, arg.UrlSecond[i].UrlHash, urlSecond.UrlHash)
 		require.Equal(t, arg.ID, urlSecond.UniqueID)
-		require.Equal(t, arg.UrlSecond[i].Regex, urlSecond.Regex)
-		require.Equal(t, arg.UrlSecond[i].StartIndex, urlSecond.StartIndex)
-		require.Equal(t, arg.UrlSecond[i].FinishIndex, urlSecond.FinishIndex)
 		actualUrlSecond, err3 := store.q.GetUrlSecond(context.Background(), urlSecond.ID)
+		actualRegex, err4 := store.q.GetRegexByUrlId(context.Background(), urlSecond.ID)
 		require.NoError(t, err3)
+		require.NoError(t, err4)
 		require.Equal(t, urlSecond.ID, actualUrlSecond.ID)
 		require.Equal(t, urlSecond.UniqueID, actualUrlSecond.UniqueID)
-		require.Equal(t, urlSecond.Regex, actualUrlSecond.Regex)
-		require.Equal(t, urlSecond.StartIndex, actualUrlSecond.StartIndex)
-		require.Equal(t, urlSecond.FinishIndex, actualUrlSecond.FinishIndex)
+		//check the Regex
+		for j, regex := range actualRegex {
+			require.Equal(t, regex.UrlID, urlSecond.ID)
+			require.Equal(t, arg.UrlSecond[i].Regex[j].Regex, regex.Regex)
+			require.Equal(t, arg.UrlSecond[i].Regex[j].StartIndex, regex.StartIndex)
+			require.Equal(t, arg.UrlSecond[i].Regex[j].FinishIndex, regex.FinishIndex)
+			require.NotZero(t, regex.ID)
+		}
 	}
 
 	//check the RequestUrl
@@ -116,9 +131,9 @@ func TestStore_GetConfigTx(t *testing.T) {
 		require.Equal(t, urlSecond.ID, result.UrlSecond[i].ID)
 		require.Equal(t, urlSecond.UrlHash, result.UrlSecond[i].UrlHash)
 		require.Equal(t, urlSecond.UniqueID, result.UrlSecond[i].UniqueID)
-		require.Equal(t, urlSecond.Regex, result.UrlSecond[i].Regex)
-		require.Equal(t, urlSecond.StartIndex, result.UrlSecond[i].StartIndex)
-		require.Equal(t, urlSecond.FinishIndex, result.UrlSecond[i].FinishIndex)
+		//require.Equal(t, urlSecond.Regex, result.UrlSecond[i].Regex)
+		//require.Equal(t, urlSecond.StartIndex, result.UrlSecond[i].StartIndex)
+		//require.Equal(t, urlSecond.FinishIndex, result.UrlSecond[i].FinishIndex)
 	}
 
 	//test RequestUrl
