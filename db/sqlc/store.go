@@ -38,29 +38,26 @@ func (store *Store) execTx(ctx context.Context, fn func(queries *Queries) error)
 }
 
 type AddConfigTxParams struct {
-	ID           int64       `json:"id"`
-	SyncType     string      `json:"sync_type"`
-	IsLive       bool        `json:"is_live"`
-	UrlHashFirst []string    `json:"urlHashFirst"`
-	UrlSecond    []Urlsecond `json:"urlSecond"`
-	Regex        []Regex     `json:"regex"`
-	RequestUrl   []string    `json:"requestUrl"`
+	ID           int64
+	SyncType     string
+	IsLive       bool
+	UrlHashFirst []string
+	UrlSecond    []UrlSecondTx
+	RequestUrl   []string
 }
 
 type AddConfigTxResult struct {
-	Config     Config       `json:"config"`
-	UrlFirst   []Urlfirst   `json:"urlFirst"`
-	UrlSecond  []Urlsecond  `json:"urlSecond"`
-	RequestUrl []Requesturl `json:"requestUrl"`
-	Regex      []Regex      `json:"regex"`
+	Config     Config
+	UrlFirst   []Urlfirst
+	UrlSecond  []UrlSecondTx
+	RequestUrl []Requesturl
 }
 
 func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddConfigTxResult, error) {
 	var result AddConfigTxResult
 	result.UrlFirst = make([]Urlfirst, len(arg.UrlHashFirst))
-	result.UrlSecond = make([]Urlsecond, len(arg.UrlSecond))
+	result.UrlSecond = make([]UrlSecondTx, len(arg.UrlSecond))
 	result.RequestUrl = make([]Requesturl, len(arg.RequestUrl))
-	result.Regex = make([]Regex, len(arg.Regex))
 	err := store.execTx(ctx, func(queries *Queries) error {
 		var err error
 		result.Config, err = queries.CreateConfig(ctx, CreateConfigParams{
@@ -83,24 +80,31 @@ func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddC
 		}
 
 		for i, urlSecond := range arg.UrlSecond {
-			result.UrlSecond[i], err = queries.CreateUrlSecond(ctx, CreateUrlSecondParams{
+			result.UrlSecond[i].Regex = make([]Regex, len(arg.UrlSecond[i].Regex))
+			urlSeconds, err := queries.CreateUrlSecond(ctx, CreateUrlSecondParams{
 				UniqueID: arg.ID,
 				UrlHash:  urlSecond.UrlHash,
 			})
 			if err != nil {
 				return err
 			}
-		}
+			for j, regex := range arg.UrlSecond[i].Regex {
+				result.UrlSecond[i].Regex[j], err = queries.CreateRegex(ctx, CreateRegexParams{
+					UrlID:       urlSeconds.ID,
+					Regex:       regex.Regex,
+					StartIndex:  regex.StartIndex,
+					FinishIndex: regex.FinishIndex,
+				})
+				if err != nil {
+					return err
+				}
+			}
 
-		for i, regex := range arg.Regex {
-			result.Regex[i], err = queries.CreateRegex(ctx, CreateRegexParams{
-				UrlID:       regex.UrlID,
-				Regex:       regex.Regex,
-				StartIndex:  regex.StartIndex,
-				FinishIndex: regex.FinishIndex,
-			})
-			if err != nil {
-				return err
+			result.UrlSecond[i] = UrlSecondTx{
+				ID:       urlSeconds.ID,
+				UniqueID: urlSeconds.UniqueID,
+				UrlHash:  urlSeconds.UrlHash,
+				Regex:    arg.UrlSecond[i].Regex,
 			}
 		}
 
@@ -157,6 +161,7 @@ func (store Store) GetConfigTx(ctx context.Context, arg GetConfigTxParams) (GetC
 			return err
 		}
 
+		result.UrlSecond = make([]UrlSecondTx, len(urlSeconds))
 		for i, url := range urlSeconds {
 			regexes, err := queries.GetRegexByUrlId(ctx, url.ID)
 			if err != nil {
