@@ -131,7 +131,6 @@ type GetConfigTxResult struct {
 	Config     Config        `json:"config"`
 	UrlFirst   []Urlfirst    `json:"urlFirst"`
 	UrlSecond  []UrlSecondTx `json:"urlSecond"`
-	Regex      []Regex       `json:"regex"`
 	RequestUrl []Requesturl  `json:"requestUrl"`
 }
 

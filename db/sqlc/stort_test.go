@@ -131,9 +131,11 @@ func TestStore_GetConfigTx(t *testing.T) {
 		require.Equal(t, urlSecond.ID, result.UrlSecond[i].ID)
 		require.Equal(t, urlSecond.UrlHash, result.UrlSecond[i].UrlHash)
 		require.Equal(t, urlSecond.UniqueID, result.UrlSecond[i].UniqueID)
-		//require.Equal(t, urlSecond.Regex, result.UrlSecond[i].Regex)
-		//require.Equal(t, urlSecond.StartIndex, result.UrlSecond[i].StartIndex)
-		//require.Equal(t, urlSecond.FinishIndex, result.UrlSecond[i].FinishIndex)
+		for i2, regex := range urlSecond.Regex {
+			require.Equal(t, regex.Regex, result.UrlSecond[i].Regex[i2].Regex)
+			require.Equal(t, regex.StartIndex, result.UrlSecond[i].Regex[i2].StartIndex)
+			require.Equal(t, regex.FinishIndex, result.UrlSecond[i].Regex[i2].FinishIndex)
+		}
 	}
 
 	//test RequestUrl
