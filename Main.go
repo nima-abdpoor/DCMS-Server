@@ -3,26 +3,25 @@ package main
 import (
 	"DCMS/api"
 	"DCMS/db/sqlc"
+	"DCMS/util"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
 )
 
-const (
-	dbDriver      = "postgres"
-	serverAddress = "0.0.0.0:8080"
-	dbSource      = "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable"
-)
-
 func main() {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config: ", err)
+	}
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot start the server... ", err)
 	}
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAddress)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start the server... ", err)
 	}
