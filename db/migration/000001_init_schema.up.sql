@@ -1,8 +1,12 @@
 CREATE TABLE "config"
 (
-    "id"        bigserial PRIMARY KEY,
-    "is_live"   boolean NOT NULL,
-    "sync_type" varchar NOT NULL
+    "id"            bigserial PRIMARY KEY,
+    "is_live"       boolean NOT NULL,
+    "sync_type"     varchar NOT NULL,
+    "save_request"  boolean NOT NULL,
+    "save_response" boolean NOT NULL,
+    "save_error"    boolean NOT NULL,
+    "save_success"  boolean NOT NULL
 );
 
 CREATE TABLE "urlfirst"
