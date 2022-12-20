@@ -7,9 +7,13 @@ package db
 import ()
 
 type Config struct {
-	ID       int64  `json:"id"`
-	IsLive   bool   `json:"is_live"`
-	SyncType string `json:"sync_type"`
+	ID           int64  `json:"id"`
+	IsLive       bool   `json:"is_live"`
+	SyncType     string `json:"sync_type"`
+	SaveRequest  bool   `json:"save_request"`
+	SaveResponse bool   `json:"save_response"`
+	SaveError    bool   `json:"save_error"`
+	SaveSuccess  bool   `json:"save_success"`
 }
 
 type Regex struct {
