@@ -33,6 +33,10 @@ func addConfigTx(t *testing.T) AddConfigTxResult {
 		ID:           util.RandomInt(0, 10000),
 		SyncType:     util.RandomSyncType(),
 		IsLive:       util.RandomBoolean(),
+		SaveResponse: util.RandomBoolean(),
+		SaveRequest:  util.RandomBoolean(),
+		SaveError:    util.RandomBoolean(),
+		SaveSuccess:  util.RandomBoolean(),
 		UrlHashFirst: util.RandomUrlHashGenerator(numberOfUrlFirst),
 		UrlSecond:    urlSeconds,
 		RequestUrl:   util.RandomStringList(100, numberOfRequestUrl),
@@ -47,6 +51,10 @@ func addConfigTx(t *testing.T) AddConfigTxResult {
 	require.Equal(t, arg.ID, result.Config.ID)
 	require.Equal(t, arg.SyncType, result.Config.SyncType)
 	require.Equal(t, arg.IsLive, result.Config.IsLive)
+	require.Equal(t, arg.SaveResponse, result.Config.SaveResponse)
+	require.Equal(t, arg.SaveResponse, result.Config.SaveResponse)
+	require.Equal(t, arg.SaveError, result.Config.SaveError)
+	require.Equal(t, arg.SaveSuccess, result.Config.SaveSuccess)
 	require.NotZero(t, result.Config.ID)
 
 	actualConfig, err2 := store.q.GetConfig(context.Background(), result.Config.ID)
@@ -118,6 +126,10 @@ func TestStore_GetConfigTx(t *testing.T) {
 	require.Equal(t, addConfigTxResult.Config.ID, result.Config.ID)
 	require.Equal(t, addConfigTxResult.Config.IsLive, result.Config.IsLive)
 	require.Equal(t, addConfigTxResult.Config.SyncType, result.Config.SyncType)
+	require.Equal(t, addConfigTxResult.Config.SaveRequest, result.Config.SaveResponse)
+	require.Equal(t, addConfigTxResult.Config.SaveResponse, result.Config.SaveResponse)
+	require.Equal(t, addConfigTxResult.Config.SaveError, result.Config.SaveError)
+	require.Equal(t, addConfigTxResult.Config.SaveSuccess, result.Config.SaveSuccess)
 
 	//test UrlFirst
 	for i, urlFirst := range addConfigTxResult.UrlFirst {

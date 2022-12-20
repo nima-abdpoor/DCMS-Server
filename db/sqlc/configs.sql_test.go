@@ -10,9 +10,13 @@ import (
 
 func createRandomConfig(t *testing.T) Config {
 	arg := CreateConfigParams{
-		ID:       util.RandomInt(1, 1000000),
-		SyncType: util.RandomSyncType(),
-		IsLive:   util.RandomBoolean(),
+		ID:           util.RandomInt(1, 1000000),
+		SyncType:     util.RandomSyncType(),
+		IsLive:       util.RandomBoolean(),
+		SaveRequest:  util.RandomBoolean(),
+		SaveResponse: util.RandomBoolean(),
+		SaveError:    util.RandomBoolean(),
+		SaveSuccess:  util.RandomBoolean(),
 	}
 	config, err := testQueries.CreateConfig(context.Background(), arg)
 	require.NoError(t, err)
@@ -20,6 +24,10 @@ func createRandomConfig(t *testing.T) Config {
 	require.Equal(t, arg.ID, config.ID)
 	require.Equal(t, arg.SyncType, config.SyncType)
 	require.Equal(t, arg.IsLive, config.IsLive)
+	require.Equal(t, arg.SaveRequest, config.SaveRequest)
+	require.Equal(t, arg.SaveResponse, config.SaveResponse)
+	require.Equal(t, arg.SaveError, config.SaveError)
+	require.Equal(t, arg.SaveSuccess, config.SaveSuccess)
 	require.NotZero(t, config.ID)
 	return config
 }
@@ -48,6 +56,10 @@ func TestQueries_GetConfig(t *testing.T) {
 	require.Equal(t, config.ID, actualConfig.ID)
 	require.Equal(t, config.SyncType, actualConfig.SyncType)
 	require.Equal(t, config.IsLive, actualConfig.IsLive)
+	require.Equal(t, config.SaveRequest, actualConfig.SaveRequest)
+	require.Equal(t, config.SaveResponse, actualConfig.SaveResponse)
+	require.Equal(t, config.SaveError, actualConfig.SaveError)
+	require.Equal(t, config.SaveSuccess, actualConfig.SaveSuccess)
 }
 
 func TestQueries_ListConfigs(t *testing.T) {
@@ -70,9 +82,13 @@ func TestQueries_ListConfigs(t *testing.T) {
 func TestQueries_UpdateConfig(t *testing.T) {
 	config := createRandomConfig(t)
 	arg := UpdateConfigParams{
-		ID:       config.ID,
-		IsLive:   config.IsLive,
-		SyncType: config.SyncType,
+		ID:           config.ID,
+		IsLive:       config.IsLive,
+		SyncType:     config.SyncType,
+		SaveResponse: config.SaveResponse,
+		SaveRequest:  config.SaveRequest,
+		SaveError:    config.SaveError,
+		SaveSuccess:  config.SaveSuccess,
 	}
 	updatedConfig, err := testQueries.UpdateConfig(context.Background(), arg)
 	require.NoError(t, err)
@@ -81,4 +97,8 @@ func TestQueries_UpdateConfig(t *testing.T) {
 	require.Equal(t, arg.ID, updatedConfig.ID)
 	require.Equal(t, arg.IsLive, updatedConfig.IsLive)
 	require.Equal(t, arg.SyncType, updatedConfig.SyncType)
+	require.Equal(t, arg.SaveRequest, updatedConfig.SaveRequest)
+	require.Equal(t, arg.SaveResponse, updatedConfig.SaveResponse)
+	require.Equal(t, arg.SaveError, updatedConfig.SaveError)
+	require.Equal(t, arg.SaveSuccess, updatedConfig.SaveSuccess)
 }

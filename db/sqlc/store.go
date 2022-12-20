@@ -41,6 +41,10 @@ type AddConfigTxParams struct {
 	ID           int64
 	SyncType     string
 	IsLive       bool
+	SaveRequest  bool
+	SaveResponse bool
+	SaveError    bool
+	SaveSuccess  bool
 	UrlHashFirst []string
 	UrlSecond    []UrlSecondTx
 	RequestUrl   []string
@@ -61,9 +65,13 @@ func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddC
 	err := store.execTx(ctx, func(queries *Queries) error {
 		var err error
 		result.Config, err = queries.CreateConfig(ctx, CreateConfigParams{
-			ID:       arg.ID,
-			SyncType: arg.SyncType,
-			IsLive:   arg.IsLive,
+			ID:           arg.ID,
+			SyncType:     arg.SyncType,
+			IsLive:       arg.IsLive,
+			SaveRequest:  arg.SaveRequest,
+			SaveResponse: arg.SaveResponse,
+			SaveError:    arg.SaveError,
+			SaveSuccess:  arg.SaveSuccess,
 		})
 		if err != nil {
 			return err
