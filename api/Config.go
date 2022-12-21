@@ -10,11 +10,15 @@ import (
 )
 
 type ConfigResponse struct {
-	RequestUrls []string      `json:"validRequestUrls"`
-	UrlIdFirst  []int64       `json:"urlIdFirst"`
-	UrlIdSecond []UrlIdSecond `json:"urlIdSecond"`
-	IsLive      bool          `json:"isLive"`
-	SyncType    string        `json:"syncType"`
+	RequestUrls  []string      `json:"validRequestUrls"`
+	UrlIdFirst   []int64       `json:"urlIdFirst"`
+	UrlIdSecond  []UrlIdSecond `json:"urlIdSecond"`
+	IsLive       bool          `json:"isLive"`
+	SyncType     string        `json:"syncType"`
+	SaveRequest  bool          `json:"saveRequest"`
+	SaveResponse bool          `json:"saveResponse"`
+	SaveError    bool          `json:"saveError"`
+	SaveSuccess  bool          `json:"saveSuccess"`
 }
 
 type UrlIdSecond struct {
@@ -64,6 +68,10 @@ type PostConfig struct {
 	ID           int64       `form:"id" json:"id" binding:"required"`
 	SyncType     string      `form:"sync_type" json:"sync_type" binding:"required"`
 	IsLive       bool        `form:"is_live" json:"is_live" binding:"required"`
+	SaveRequest  bool        `form:"saveRequest" json:"saveRequest" binding:"required"`
+	SaveResponse bool        `form:"saveResponse" json:"saveResponse" binding:"required"`
+	SaveError    bool        `form:"saveError" json:"saveError" binding:"required"`
+	SaveSuccess  bool        `form:"saveSuccess" json:"saveSuccess" binding:"required"`
 	UrlHashFirst []string    `form:"urlHashFirst" json:"urlHashFirst" binding:"required"`
 	UrlSecond    []UrlSecond `form:"urlSecond" json:"urlSecond" binding:"required"`
 	RequestUrl   []string    `form:"requestUrl" json:"requestUrl" binding:"required"`
@@ -90,6 +98,10 @@ func (server *Server) postConfig(ctx *gin.Context) {
 		ID:           req.ID,
 		SyncType:     req.SyncType,
 		IsLive:       req.IsLive,
+		SaveRequest:  req.SaveRequest,
+		SaveResponse: req.SaveResponse,
+		SaveError:    req.SaveError,
+		SaveSuccess:  req.SaveSuccess,
 		UrlHashFirst: req.UrlHashFirst,
 		UrlSecond:    MapToUrlSecondDb(req.UrlSecond, req.ID),
 		RequestUrl:   req.RequestUrl,
