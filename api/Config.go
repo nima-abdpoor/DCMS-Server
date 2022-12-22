@@ -67,11 +67,11 @@ func (server *Server) getDefaultConfig(ctx *gin.Context) {
 type PostConfig struct {
 	ID           int64       `form:"id" json:"id" binding:"required"`
 	SyncType     string      `form:"sync_type" json:"sync_type" binding:"required"`
-	IsLive       bool        `form:"is_live" json:"is_live" binding:"required"`
-	SaveRequest  bool        `form:"saveRequest" json:"saveRequest" binding:"required"`
-	SaveResponse bool        `form:"saveResponse" json:"saveResponse" binding:"required"`
-	SaveError    bool        `form:"saveError" json:"saveError" binding:"required"`
-	SaveSuccess  bool        `form:"saveSuccess" json:"saveSuccess" binding:"required"`
+	IsLive       bool        `form:"is_live" json:"is_live"`
+	SaveRequest  bool        `form:"saveRequest" json:"saveRequest"`
+	SaveResponse bool        `form:"saveResponse" json:"saveResponse"`
+	SaveError    bool        `form:"saveError" json:"saveError"`
+	SaveSuccess  bool        `form:"saveSuccess" json:"saveSuccess"`
 	UrlHashFirst []string    `form:"urlHashFirst" json:"urlHashFirst" binding:"required"`
 	UrlSecond    []UrlSecond `form:"urlSecond" json:"urlSecond" binding:"required"`
 	RequestUrl   []string    `form:"requestUrl" json:"requestUrl" binding:"required"`

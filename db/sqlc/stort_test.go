@@ -126,7 +126,7 @@ func TestStore_GetConfigTx(t *testing.T) {
 	require.Equal(t, addConfigTxResult.Config.ID, result.Config.ID)
 	require.Equal(t, addConfigTxResult.Config.IsLive, result.Config.IsLive)
 	require.Equal(t, addConfigTxResult.Config.SyncType, result.Config.SyncType)
-	require.Equal(t, addConfigTxResult.Config.SaveRequest, result.Config.SaveResponse)
+	require.Equal(t, addConfigTxResult.Config.SaveRequest, result.Config.SaveRequest)
 	require.Equal(t, addConfigTxResult.Config.SaveResponse, result.Config.SaveResponse)
 	require.Equal(t, addConfigTxResult.Config.SaveError, result.Config.SaveError)
 	require.Equal(t, addConfigTxResult.Config.SaveSuccess, result.Config.SaveSuccess)
