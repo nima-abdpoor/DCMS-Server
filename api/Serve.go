@@ -3,6 +3,7 @@ package api
 import (
 	db "DCMS/db/sqlc"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Server struct {
@@ -13,9 +14,13 @@ type Server struct {
 func NewServer(store *db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
+	router.LoadHTMLGlob("templates/*")
 	router.GET("/config/:id", server.getConfig)
 	router.GET("/config", server.getDefaultConfig)
 	router.POST("/config", server.postConfig)
+	router.GET("/", server.homePage)
+	router.POST("/upload/single", uploadSingleFile)
+	router.StaticFS("/images", http.Dir("public"))
 	server.router = router
 	return server
 }
