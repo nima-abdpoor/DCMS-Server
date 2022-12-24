@@ -1,7 +1,7 @@
 package api
 
 import (
-	"encoding/json"
+	"DCMS/input"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -31,16 +31,14 @@ func uploadSingleFile(ctx *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	data := CatlogNodes{}
-	var byteFile []byte
-	_, err = out.Read(byteFile)
-	err = json.Unmarshal(byteFile, &data)
-	defer out.Close()
 	_, err = io.Copy(out, file)
 	if err != nil {
 		log.Fatal(err)
 	}
+	configs, err := input.ReadFromFile(out)
+	fmt.Println("here is configs:", configs)
 	ctx.JSON(http.StatusOK, gin.H{"filepath": filePath})
+	defer out.Close()
 }
 
 func init() {
