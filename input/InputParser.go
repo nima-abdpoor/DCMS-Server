@@ -6,11 +6,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"os"
 	"strconv"
 )
 
-func ReadFromFile(file *os.File) (configs []db.AddConfigTxParams, err error) {
+func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
 	byteValue, err := ioutil.ReadFile("./public/single/config.txt")
 	if err != nil {
 		log.Fatal("error in Reading the config file...", err)
@@ -76,44 +75,25 @@ func ReadFromFile(file *os.File) (configs []db.AddConfigTxParams, err error) {
 	return
 }
 
-//type Config struct {
-//	Cluster []Cluster `json:"cluster"`
-//}
-//
-//type Cluster struct {
-//	Name         int64       `json:"name"`
-//	Ids          []int64     `json:"ids"`
-//	SyncType     string      `json:"syncType"`
-//	IsLive       bool        `json:"isLive"`
-//	SaveRequest  bool        `json:"saveRequest"`
-//	SaveResponse bool        `json:"saveResponse"`
-//	SaveError    bool        `json:"saveError"`
-//	SaveSuccess  bool        `json:"saveSuccess"`
-//	FirstUrl     []string    `json:"firstUrl"`
-//	RequestUrl   []string    `json:"requestUrl"`
-//	SecondUrl    []SecondUrl `json:"secondUrl"`
-//}
-//
-//type SecondUrl struct {
-//	Url   string     `json:"url"`
-//	Regex []db.Regex `json:"regex"`
-//}
-
 type Config struct {
-	Cluster []struct {
-		Name         int64    `json:"name"`
-		Ids          []int64  `json:"ids,omitempty"`
-		SyncType     string   `json:"syncType"`
-		IsLive       bool     `json:"isLive"`
-		SaveRequest  bool     `json:"saveRequest"`
-		SaveResponse bool     `json:"saveResponse"`
-		SaveError    bool     `json:"saveError"`
-		SaveSuccess  bool     `json:"saveSuccess"`
-		FirstURL     []string `json:"firstUrl"`
-		SecondURL    []struct {
-			URL   string     `json:"url"`
-			Regex []db.Regex `json:"regex"`
-		} `json:"secondUrl"`
-		RequestURL []string `json:"requestUrl"`
-	} `json:"cluster"`
+	Cluster []Cluster `json:"cluster"`
+}
+
+type Cluster struct {
+	Name         int64       `json:"name"`
+	Ids          []int64     `json:"ids"`
+	SyncType     string      `json:"syncType"`
+	IsLive       bool        `json:"isLive"`
+	SaveRequest  bool        `json:"saveRequest"`
+	SaveResponse bool        `json:"saveResponse"`
+	SaveError    bool        `json:"saveError"`
+	SaveSuccess  bool        `json:"saveSuccess"`
+	FirstURL     []string    `json:"firstUrl"`
+	RequestURL   []string    `json:"requestUrl"`
+	SecondURL    []SecondUrl `json:"secondUrl"`
+}
+
+type SecondUrl struct {
+	URL   string     `json:"url"`
+	Regex []db.Regex `json:"regex"`
 }

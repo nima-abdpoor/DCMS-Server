@@ -15,12 +15,12 @@ func NewServer(store *db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
+	router.GET("/", homePage)
+	router.POST("/upload/single", server.uploadSingleFile)
+	router.StaticFS("/images", http.Dir("public"))
 	router.GET("/config/:id", server.getConfig)
 	router.GET("/config", server.getDefaultConfig)
 	router.POST("/config", server.postConfig)
-	router.GET("/", server.homePage)
-	router.POST("/upload/single", uploadSingleFile)
-	router.StaticFS("/images", http.Dir("public"))
 	server.router = router
 	return server
 }
