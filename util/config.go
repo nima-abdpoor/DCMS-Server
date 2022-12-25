@@ -8,6 +8,7 @@ type Config struct {
 	DBDriver      string `mapstructure:"DB_DRIVER"`
 	DBSource      string `mapstructure:"DB_SOURCE"`
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	ServerType    string `mapstructure:"SERVER_TYPE"`
 }
 
 // LoadConfig reads configurations from file or environment variables.
@@ -23,5 +24,10 @@ func LoadConfig(path string) (config Config, err error) {
 	}
 
 	err = viper.Unmarshal(&config)
+	if config.ServerType == "PRODUCTION" {
+		productionDBSource := "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable"
+		viper.Set("DB_SOURCE", productionDBSource)
+		config.DBSource = productionDBSource
+	}
 	return
 }
