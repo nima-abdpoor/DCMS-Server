@@ -58,7 +58,7 @@ func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
 					Regex:    url.Regex,
 				}
 			}
-			configs[0] = db.AddConfigTxParams{
+			configs = append(configs, db.AddConfigTxParams{
 				ID:           cluster.Name,
 				SyncType:     cluster.SyncType,
 				IsLive:       cluster.IsLive,
@@ -69,7 +69,7 @@ func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
 				UrlHashFirst: firstUrls,
 				UrlSecond:    secondUrl,
 				RequestUrl:   cluster.RequestURL,
-			}
+			})
 		}
 	}
 	return
