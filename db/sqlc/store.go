@@ -96,7 +96,7 @@ func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddC
 			if err != nil {
 				return err
 			}
-			for j, regex := range arg.UrlSecond[i].Regex {
+			for j, regex := range urlSecond.Regex {
 				result.UrlSecond[i].Regex[j], err = queries.CreateRegex(ctx, CreateRegexParams{
 					UrlID:       urlSeconds.ID,
 					Regex:       regex.Regex,

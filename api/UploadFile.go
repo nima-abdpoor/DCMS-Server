@@ -31,9 +31,9 @@ func (server *Server) saveConfigToDataBase(configs []db.AddConfigTxParams, ctx *
 		if err != nil {
 			if err == sql.ErrNoRows {
 				ctx.JSON(http.StatusNotFound, errorResponse(err))
-				return
 			}
 			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+			continue
 		}
 		ctx.JSON(http.StatusOK, configResult)
 	}
