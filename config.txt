@@ -1,0 +1,133 @@
+{
+    "cluster": [
+        {
+            "name": 100,
+            "ids": [
+                102,
+                600,
+                300
+            ],
+            "syncType": "2",
+            "isLive": false,
+            "saveRequest": true,
+            "saveResponse": false,
+            "saveError": true,
+            "saveSuccess": false,
+            "firstUrl": [
+                "https://google.com",
+                "https://youtube.com"
+            ],
+            "secondUrl": [
+                {
+                    "url": "https://github.com/nima-abdpoor/*/1111/",
+                    "regex": [
+                        {
+                            "regex": "([\\d]+)",
+                            "start_index": 31,
+                            "finish_index": 0
+                        }
+                    ]
+                },
+                {
+                    "url": "https://jeiran.adanic.me/browse/*/salam/",
+                    "regex": [
+                        {
+                            "regex": "([KLD-]+)([\\d+]+)",
+                            "start_index": 31,
+                            "finish_index": 0
+                        }
+                    ]
+                }
+            ],
+            "requestUrl": [
+                "https://dcms.com",
+                "http:192.168.1.100:8080"
+            ]
+        },
+        {
+            "name": 101,
+            "ids": [
+                900,
+                102
+            ],
+            "syncType": "1",
+            "isLive": true,
+            "saveRequest": true,
+            "saveResponse": true,
+            "saveError": true,
+            "saveSuccess": true,
+            "firstUrl": [
+                "http://192.168.100.0"
+            ],
+            "secondUrl": [
+                {
+                    "url": "https://github.com/*/nima/",
+                    "regex": [
+                        {
+                            "regex": "([\\w]+)",
+                            "start_index": 18,
+                            "finish_index": 0
+                        }
+                    ]
+                }
+            ],
+            "requestUrl": [
+                "http:192.168.1.100:8080"
+            ]
+        },
+        {
+            "name": 6022447895,
+            "syncType": "1",
+            "isLive": true,
+            "saveRequest": true,
+            "saveResponse": true,
+            "saveError": true,
+            "saveSuccess": true,
+            "firstUrl": [
+                "http://192.168.100.0"
+            ],
+            "secondUrl": [
+                {
+                    "url": "https://github.com/*/nima/",
+                    "regex": [
+                        {
+                            "regex": "([\\w]+)",
+                            "start_index": 18,
+                            "finish_index": 0
+                        }
+                    ]
+                }
+            ],
+            "requestUrl": [
+                "http:192.168.1.100:8080"
+            ]
+        },
+        {
+            "name": 6660283978,
+            "syncType": "1",
+            "isLive": true,
+            "saveRequest": true,
+            "saveResponse": true,
+            "saveError": true,
+            "saveSuccess": true,
+            "firstUrl": [
+                "http://192.168.100.0"
+            ],
+            "secondUrl": [
+                {
+                    "url": "https://github.com/*/nima/",
+                    "regex": [
+                        {
+                            "regex": "([\\w]+)",
+                            "start_index": 18,
+                            "finish_index": 0
+                        }
+                    ]
+                }
+            ],
+            "requestUrl": [
+                "http:192.168.1.100:8080"
+            ]
+        }
+    ]
+}
