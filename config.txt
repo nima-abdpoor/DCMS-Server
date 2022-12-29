@@ -111,7 +111,10 @@
             "saveError": true,
             "saveSuccess": true,
             "firstUrl": [
-                "http://192.168.100.0"
+                "http://192.168.100.0/",
+                "https://dummyjson.com/products/",
+                "https://dummyjson.com/products/search?q=phone",
+                "https://dummyjson.com/products?limit=10&skip=10&select=title,price"
             ],
             "secondUrl": [
                 {
@@ -120,6 +123,36 @@
                         {
                             "regex": "([\\w]+)",
                             "start_index": 18,
+                            "finish_index": 0
+                        }
+                    ]
+                },
+                {
+                    "url": "https://dummyjson.com/products/*/",
+                    "regex": [
+                        {
+                            "regex": "([\\d]+)",
+                            "start_index": 30,
+                            "finish_index": 0
+                        }
+                    ]
+                },
+                {
+                    "url": "https://dummyjson.com/products/category/*/",
+                    "regex": [
+                        {
+                            "regex": "([\\w]+)",
+                            "start_index": 39,
+                            "finish_index": 0
+                        }
+                    ]
+                },
+                 {
+                    "url": "https://dummyjson.com/carts/*/",
+                    "regex": [
+                        {
+                            "regex": "([\\d]+)",
+                            "start_index": 27,
                             "finish_index": 0
                         }
                     ]
