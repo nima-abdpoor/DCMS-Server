@@ -27,12 +27,12 @@ type UrlIdSecond struct {
 	StartIndex  int32  `json:"startIndex"`
 	FinishIndex int32  `json:"finishIndex"`
 }
-type getConfigRequest struct {
+type idPath struct {
 	ID int64 `uri:"id" binding:"required"`
 }
 
 func (server *Server) getConfig(ctx *gin.Context) {
-	var req getConfigRequest
+	var req idPath
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
