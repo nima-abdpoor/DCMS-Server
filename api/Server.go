@@ -22,6 +22,7 @@ func NewServer(store *db.Store) *Server {
 	router.GET("/config", server.getDefaultConfig)
 	router.POST("/config", server.postConfig)
 	router.POST("/sendLogFile", server.postLogFile)
+	router.POST("/sendLog/:id", server.postLog)
 	server.router = router
 	return server
 }
