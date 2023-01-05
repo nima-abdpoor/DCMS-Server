@@ -4,6 +4,7 @@ import (
 	db "DCMS/db/sqlc"
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -26,7 +27,6 @@ type LiveLog struct {
 }
 
 func (server *Server) postLog(ctx *gin.Context) {
-	var req LiveLog
 	var idPath idPath
 	if err := ctx.ShouldBindUri(&idPath); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
@@ -34,10 +34,6 @@ func (server *Server) postLog(ctx *gin.Context) {
 	}
 	if idPath.ID <= 10 {
 		ctx.JSON(http.StatusForbidden, "This ID Is Reserved")
-		return
-	}
-	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 	_, err := server.store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: idPath.ID})
@@ -59,7 +55,16 @@ func (server *Server) postLog(ctx *gin.Context) {
 		return
 	}
 	defer f.Close()
-	_, err = f.WriteString("RequestTime:" + req.Response.RequestTime)
+	length := ctx.Request.Header.Get("Content-Length")
+	intle, _ := strconv.Atoi(length)
+	bodyBuffer := make([]byte, intle*2)
+	body, err := ctx.Request.Body.Read(bodyBuffer)
+	rawBody := string(bodyBuffer[0:body])
+	fmt.Println("rawBody:", rawBody)
+	_, err = f.WriteString(rawBody)
+	fmt.Println("length:", intle)
+	askdf, _ := ctx.GetRawData()
+	fmt.Println("getrawData:", string(askdf))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
