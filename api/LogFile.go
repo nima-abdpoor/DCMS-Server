@@ -12,6 +12,15 @@ type LogFile struct {
 
 func (server *Server) postLogFile(ctx *gin.Context) {
 	var req LogFile
+	var idPath idPath
+	if err := ctx.ShouldBindUri(&idPath); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	if idPath.ID <= 10 {
+		ctx.JSON(http.StatusForbidden, "This ID Is Reserved")
+		return
+	}
 	if err := ctx.ShouldBind(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
