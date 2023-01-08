@@ -11,44 +11,68 @@ import (
 
 const createConfig = `-- name: CreateConfig :one
 INSERT INTO config (id,
-                    sync_type,
                     is_live,
                     save_request,
                     save_response,
                     save_error,
-                    save_success)
-values ($1, $2, $3, $4, $5, $6, $7) RETURNING id, is_live, sync_type, save_request, save_response, save_error, save_success
+                    save_success,
+                    network_type,
+                    repeat_interval,
+                    repeat_interval_time_unit,
+                    requires_battery_not_low,
+                    requires_storage_not_low,
+                    requires_charging,
+                    requires_device_idl)
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id, is_live, save_request, save_response, save_error, save_success, network_type, repeat_interval, repeat_interval_time_unit, requires_battery_not_low, requires_storage_not_low, requires_charging, requires_device_idl
 `
 
 type CreateConfigParams struct {
-	ID           int64  `json:"id"`
-	SyncType     string `json:"sync_type"`
-	IsLive       bool   `json:"is_live"`
-	SaveRequest  bool   `json:"save_request"`
-	SaveResponse bool   `json:"save_response"`
-	SaveError    bool   `json:"save_error"`
-	SaveSuccess  bool   `json:"save_success"`
+	ID                     int64  `json:"id"`
+	IsLive                 bool   `json:"is_live"`
+	SaveRequest            bool   `json:"save_request"`
+	SaveResponse           bool   `json:"save_response"`
+	SaveError              bool   `json:"save_error"`
+	SaveSuccess            bool   `json:"save_success"`
+	NetworkType            string `json:"network_type"`
+	RepeatInterval         int64  `json:"repeat_interval"`
+	RepeatIntervalTimeUnit string `json:"repeat_interval_time_unit"`
+	RequiresBatteryNotLow  bool   `json:"requires_battery_not_low"`
+	RequiresStorageNotLow  bool   `json:"requires_storage_not_low"`
+	RequiresCharging       bool   `json:"requires_charging"`
+	RequiresDeviceIdl      bool   `json:"requires_device_idl"`
 }
 
 func (q *Queries) CreateConfig(ctx context.Context, arg CreateConfigParams) (Config, error) {
 	row := q.db.QueryRowContext(ctx, createConfig,
 		arg.ID,
-		arg.SyncType,
 		arg.IsLive,
 		arg.SaveRequest,
 		arg.SaveResponse,
 		arg.SaveError,
 		arg.SaveSuccess,
+		arg.NetworkType,
+		arg.RepeatInterval,
+		arg.RepeatIntervalTimeUnit,
+		arg.RequiresBatteryNotLow,
+		arg.RequiresStorageNotLow,
+		arg.RequiresCharging,
+		arg.RequiresDeviceIdl,
 	)
 	var i Config
 	err := row.Scan(
 		&i.ID,
 		&i.IsLive,
-		&i.SyncType,
 		&i.SaveRequest,
 		&i.SaveResponse,
 		&i.SaveError,
 		&i.SaveSuccess,
+		&i.NetworkType,
+		&i.RepeatInterval,
+		&i.RepeatIntervalTimeUnit,
+		&i.RequiresBatteryNotLow,
+		&i.RequiresStorageNotLow,
+		&i.RequiresCharging,
+		&i.RequiresDeviceIdl,
 	)
 	return i, err
 }
@@ -65,7 +89,7 @@ func (q *Queries) DeleteConfig(ctx context.Context, id int64) error {
 }
 
 const getConfig = `-- name: GetConfig :one
-SELECT id, is_live, sync_type, save_request, save_response, save_error, save_success
+SELECT id, is_live, save_request, save_response, save_error, save_success, network_type, repeat_interval, repeat_interval_time_unit, requires_battery_not_low, requires_storage_not_low, requires_charging, requires_device_idl
 FROM config
 WHERE id = $1 LIMIT 1
 `
@@ -76,17 +100,23 @@ func (q *Queries) GetConfig(ctx context.Context, id int64) (Config, error) {
 	err := row.Scan(
 		&i.ID,
 		&i.IsLive,
-		&i.SyncType,
 		&i.SaveRequest,
 		&i.SaveResponse,
 		&i.SaveError,
 		&i.SaveSuccess,
+		&i.NetworkType,
+		&i.RepeatInterval,
+		&i.RepeatIntervalTimeUnit,
+		&i.RequiresBatteryNotLow,
+		&i.RequiresStorageNotLow,
+		&i.RequiresCharging,
+		&i.RequiresDeviceIdl,
 	)
 	return i, err
 }
 
 const listConfigs = `-- name: ListConfigs :many
-SELECT id, is_live, sync_type, save_request, save_response, save_error, save_success
+SELECT id, is_live, save_request, save_response, save_error, save_success, network_type, repeat_interval, repeat_interval_time_unit, requires_battery_not_low, requires_storage_not_low, requires_charging, requires_device_idl
 FROM config
 ORDER BY id LIMIT $1
 OFFSET $2
@@ -109,11 +139,17 @@ func (q *Queries) ListConfigs(ctx context.Context, arg ListConfigsParams) ([]Con
 		if err := rows.Scan(
 			&i.ID,
 			&i.IsLive,
-			&i.SyncType,
 			&i.SaveRequest,
 			&i.SaveResponse,
 			&i.SaveError,
 			&i.SaveSuccess,
+			&i.NetworkType,
+			&i.RepeatInterval,
+			&i.RepeatIntervalTimeUnit,
+			&i.RequiresBatteryNotLow,
+			&i.RequiresStorageNotLow,
+			&i.RequiresCharging,
+			&i.RequiresDeviceIdl,
 		); err != nil {
 			return nil, err
 		}
@@ -130,44 +166,68 @@ func (q *Queries) ListConfigs(ctx context.Context, arg ListConfigsParams) ([]Con
 
 const updateConfig = `-- name: UpdateConfig :one
 UPDATE config
-set is_live       = $2,
-    sync_type     = $3,
-    save_request  = $4,
-    save_response = $5,
-    save_error    = $6,
-    save_success  = $7
-WHERE id = $1 RETURNING id, is_live, sync_type, save_request, save_response, save_error, save_success
+set is_live                   = $2,
+    save_request              = $3,
+    save_response             = $4,
+    save_error                = $5,
+    save_success              = $6,
+    network_type              = $7,
+    repeat_interval           = $8,
+    repeat_interval_time_unit = $9,
+    requires_battery_not_low  = $10,
+    requires_storage_not_low  = $11,
+    requires_charging         = $12,
+    requires_device_idl       = $13
+WHERE id = $1 RETURNING id, is_live, save_request, save_response, save_error, save_success, network_type, repeat_interval, repeat_interval_time_unit, requires_battery_not_low, requires_storage_not_low, requires_charging, requires_device_idl
 `
 
 type UpdateConfigParams struct {
-	ID           int64  `json:"id"`
-	IsLive       bool   `json:"is_live"`
-	SyncType     string `json:"sync_type"`
-	SaveRequest  bool   `json:"save_request"`
-	SaveResponse bool   `json:"save_response"`
-	SaveError    bool   `json:"save_error"`
-	SaveSuccess  bool   `json:"save_success"`
+	ID                     int64  `json:"id"`
+	IsLive                 bool   `json:"is_live"`
+	SaveRequest            bool   `json:"save_request"`
+	SaveResponse           bool   `json:"save_response"`
+	SaveError              bool   `json:"save_error"`
+	SaveSuccess            bool   `json:"save_success"`
+	NetworkType            string `json:"network_type"`
+	RepeatInterval         int64  `json:"repeat_interval"`
+	RepeatIntervalTimeUnit string `json:"repeat_interval_time_unit"`
+	RequiresBatteryNotLow  bool   `json:"requires_battery_not_low"`
+	RequiresStorageNotLow  bool   `json:"requires_storage_not_low"`
+	RequiresCharging       bool   `json:"requires_charging"`
+	RequiresDeviceIdl      bool   `json:"requires_device_idl"`
 }
 
 func (q *Queries) UpdateConfig(ctx context.Context, arg UpdateConfigParams) (Config, error) {
 	row := q.db.QueryRowContext(ctx, updateConfig,
 		arg.ID,
 		arg.IsLive,
-		arg.SyncType,
 		arg.SaveRequest,
 		arg.SaveResponse,
 		arg.SaveError,
 		arg.SaveSuccess,
+		arg.NetworkType,
+		arg.RepeatInterval,
+		arg.RepeatIntervalTimeUnit,
+		arg.RequiresBatteryNotLow,
+		arg.RequiresStorageNotLow,
+		arg.RequiresCharging,
+		arg.RequiresDeviceIdl,
 	)
 	var i Config
 	err := row.Scan(
 		&i.ID,
 		&i.IsLive,
-		&i.SyncType,
 		&i.SaveRequest,
 		&i.SaveResponse,
 		&i.SaveError,
 		&i.SaveSuccess,
+		&i.NetworkType,
+		&i.RepeatInterval,
+		&i.RepeatIntervalTimeUnit,
+		&i.RequiresBatteryNotLow,
+		&i.RequiresStorageNotLow,
+		&i.RequiresCharging,
+		&i.RequiresDeviceIdl,
 	)
 	return i, err
 }

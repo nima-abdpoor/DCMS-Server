@@ -1,12 +1,18 @@
 CREATE TABLE "config"
 (
-    "id"            bigserial PRIMARY KEY,
-    "is_live"       boolean NOT NULL,
-    "sync_type"     varchar NOT NULL,
-    "save_request"  boolean NOT NULL,
-    "save_response" boolean NOT NULL,
-    "save_error"    boolean NOT NULL,
-    "save_success"  boolean NOT NULL
+    "id"                       bigserial PRIMARY KEY,
+    "is_live"                  boolean   NOT NULL,
+    "save_request"             boolean   NOT NULL,
+    "save_response"            boolean   NOT NULL,
+    "save_error"               boolean   NOT NULL,
+    "save_success"             boolean   NOT NULL,
+    "network_type"             varchar   NOT NULL,
+    "repeat_interval"          bigserial NOT NULL,
+    "repeat_interval_time_unit" varchar   NOT NULL,
+    "requires_battery_not_low"  boolean   NOT NULL,
+    "requires_storage_not_low"  boolean   NOT NULL,
+    "requires_charging"        boolean   NOT NULL,
+    "requires_device_idl"      boolean   NOT NULL
 );
 
 CREATE TABLE "urlfirst"

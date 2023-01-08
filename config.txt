@@ -13,6 +13,13 @@
             "saveResponse": false,
             "saveError": true,
             "saveSuccess": false,
+            "networkType": "6",
+            "repeatInterval" : 1,
+            "repeatIntervalTimeUnit": "6",
+            "requiresBatteryNotLow" : true,
+            "requiresStorageNotLow": true,
+            "requiresCharging" : false,
+            "requiresDeviceIdl": true,
             "firstUrl": [
                 "https://google.com",
                 "https://youtube.com"
@@ -56,33 +63,13 @@
             "saveResponse": true,
             "saveError": true,
             "saveSuccess": true,
-            "firstUrl": [
-                "http://192.168.100.0"
-            ],
-            "secondUrl": [
-                {
-                    "url": "https://github.com/*/nima/",
-                    "regex": [
-                        {
-                            "regex": "([\\w]+)",
-                            "start_index": 18,
-                            "finish_index": 0
-                        }
-                    ]
-                }
-            ],
-            "requestUrl": [
-                "http:192.168.1.100:8080"
-            ]
-        },
-        {
-            "name": 6022447895,
-            "syncType": "1",
-            "isLive": true,
-            "saveRequest": true,
-            "saveResponse": true,
-            "saveError": true,
-            "saveSuccess": true,
+            "networkType": "6",
+            "repeatInterval" : 1,
+            "repeatIntervalTimeUnit": "6",
+            "requiresBatteryNotLow" : true,
+            "requiresStorageNotLow": true,
+            "requiresCharging" : false,
+            "requiresDeviceIdl": true,
             "firstUrl": [
                 "http://192.168.100.0"
             ],
@@ -105,11 +92,18 @@
         {
             "name": 6660283978,
             "syncType": "1",
-            "isLive": true,
+            "isLive": false,
             "saveRequest": true,
             "saveResponse": true,
             "saveError": true,
             "saveSuccess": true,
+            "networkType": "6",
+            "repeatInterval" : 1,
+            "repeatIntervalTimeUnit": "6",
+            "requiresBatteryNotLow" : true,
+            "requiresStorageNotLow": true,
+            "requiresCharging" : false,
+            "requiresDeviceIdl": true,
             "firstUrl": [
                 "http://192.168.100.0/",
                 "https://dummyjson.com/products/",
@@ -147,7 +141,7 @@
                         }
                     ]
                 },
-                 {
+                {
                     "url": "https://dummyjson.com/carts/*/",
                     "regex": [
                         {

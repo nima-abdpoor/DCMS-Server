@@ -65,16 +65,22 @@ func (server *Server) getDefaultConfig(ctx *gin.Context) {
 }
 
 type PostConfig struct {
-	ID           int64       `form:"id" json:"id" binding:"required"`
-	SyncType     string      `form:"sync_type" json:"sync_type" binding:"required"`
-	IsLive       bool        `form:"is_live" json:"is_live"`
-	SaveRequest  bool        `form:"saveRequest" json:"saveRequest"`
-	SaveResponse bool        `form:"saveResponse" json:"saveResponse"`
-	SaveError    bool        `form:"saveError" json:"saveError"`
-	SaveSuccess  bool        `form:"saveSuccess" json:"saveSuccess"`
-	UrlHashFirst []string    `form:"urlHashFirst" json:"urlHashFirst" binding:"required"`
-	UrlSecond    []UrlSecond `form:"urlSecond" json:"urlSecond" binding:"required"`
-	RequestUrl   []string    `form:"requestUrl" json:"requestUrl" binding:"required"`
+	ID                     int64       `form:"id" json:"id" binding:"required"`
+	NetworkType            string      `form:"networkType" json:"networkType" binding:"required"`
+	IsLive                 bool        `form:"is_live" json:"is_live"`
+	SaveRequest            bool        `form:"saveRequest" json:"saveRequest"`
+	SaveResponse           bool        `form:"saveResponse" json:"saveResponse"`
+	SaveError              bool        `form:"saveError" json:"saveError"`
+	SaveSuccess            bool        `form:"saveSuccess" json:"saveSuccess"`
+	RepeatInterval         int64       `json:"repeatInterval"`
+	RepeatIntervalTimeUnit string      `json:"repeatIntervalTimeUnit"`
+	RequiresBatteryNotLow  bool        `json:"requiresBatteryNotLow"`
+	RequiresStorageNotLow  bool        `json:"requiresStorageNotLow"`
+	RequiresCharging       bool        `json:"requiresCharging"`
+	RequiresDeviceIdl      bool        `json:"requiresDeviceIdl"`
+	UrlHashFirst           []string    `form:"urlHashFirst" json:"urlHashFirst" binding:"required"`
+	UrlSecond              []UrlSecond `form:"urlSecond" json:"urlSecond" binding:"required"`
+	RequestUrl             []string    `form:"requestUrl" json:"requestUrl" binding:"required"`
 }
 
 type UrlSecond struct {
@@ -95,16 +101,22 @@ func (server *Server) postConfig(ctx *gin.Context) {
 		return
 	}
 	configResult, err := server.store.AddConfigTx(context.Background(), db.AddConfigTxParams{
-		ID:           req.ID,
-		SyncType:     req.SyncType,
-		IsLive:       req.IsLive,
-		SaveRequest:  req.SaveRequest,
-		SaveResponse: req.SaveResponse,
-		SaveError:    req.SaveError,
-		SaveSuccess:  req.SaveSuccess,
-		UrlHashFirst: req.UrlHashFirst,
-		UrlSecond:    MapToUrlSecondDb(req.UrlSecond, req.ID),
-		RequestUrl:   req.RequestUrl,
+		ID:                     req.ID,
+		NetworkType:            req.NetworkType,
+		IsLive:                 req.IsLive,
+		SaveRequest:            req.SaveRequest,
+		SaveResponse:           req.SaveResponse,
+		SaveError:              req.SaveError,
+		SaveSuccess:            req.SaveSuccess,
+		RepeatInterval:         req.RepeatInterval,
+		RepeatIntervalTimeUnit: req.RepeatIntervalTimeUnit,
+		RequiresBatteryNotLow:  req.RequiresBatteryNotLow,
+		RequiresStorageNotLow:  req.RequiresStorageNotLow,
+		RequiresCharging:       req.RequiresCharging,
+		RequiresDeviceIdl:      req.RequiresDeviceIdl,
+		UrlHashFirst:           req.UrlHashFirst,
+		UrlSecond:              MapToUrlSecondDb(req.UrlSecond, req.ID),
+		RequestUrl:             req.RequestUrl,
 	})
 	if err != nil {
 		if err == sql.ErrNoRows {
