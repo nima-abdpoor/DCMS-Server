@@ -30,16 +30,22 @@ func addConfigTx(t *testing.T) AddConfigTxResult {
 		}
 	}
 	arg := AddConfigTxParams{
-		ID:           util.RandomInt(0, 10000),
-		SyncType:     util.RandomSyncType(),
-		IsLive:       util.RandomBoolean(),
-		SaveResponse: util.RandomBoolean(),
-		SaveRequest:  util.RandomBoolean(),
-		SaveError:    util.RandomBoolean(),
-		SaveSuccess:  util.RandomBoolean(),
-		UrlHashFirst: util.RandomUrlHashGenerator(numberOfUrlFirst),
-		UrlSecond:    urlSeconds,
-		RequestUrl:   util.RandomStringList(100, numberOfRequestUrl),
+		ID:                     util.RandomInt(0, 10000),
+		NetworkType:            util.RandomNetworkType(),
+		IsLive:                 util.RandomBoolean(),
+		SaveResponse:           util.RandomBoolean(),
+		SaveRequest:            util.RandomBoolean(),
+		SaveError:              util.RandomBoolean(),
+		SaveSuccess:            util.RandomBoolean(),
+		RepeatIntervalTimeUnit: util.RandomTimeUnit(),
+		RepeatInterval:         util.RandomInt(1, 10),
+		RequiresBatteryNotLow:  util.RandomBoolean(),
+		RequiresStorageNotLow:  util.RandomBoolean(),
+		RequiresCharging:       util.RandomBoolean(),
+		RequiresDeviceIdl:      util.RandomBoolean(),
+		UrlHashFirst:           util.RandomUrlHashGenerator(numberOfUrlFirst),
+		UrlSecond:              urlSeconds,
+		RequestUrl:             util.RandomStringList(100, numberOfRequestUrl),
 	}
 
 	result, err := store.AddConfigTx(context.Background(), arg)
@@ -49,19 +55,25 @@ func addConfigTx(t *testing.T) AddConfigTxResult {
 
 	//check the config
 	require.Equal(t, arg.ID, result.Config.ID)
-	require.Equal(t, arg.SyncType, result.Config.SyncType)
+	require.Equal(t, arg.NetworkType, result.Config.NetworkType)
 	require.Equal(t, arg.IsLive, result.Config.IsLive)
 	require.Equal(t, arg.SaveResponse, result.Config.SaveResponse)
 	require.Equal(t, arg.SaveResponse, result.Config.SaveResponse)
 	require.Equal(t, arg.SaveError, result.Config.SaveError)
 	require.Equal(t, arg.SaveSuccess, result.Config.SaveSuccess)
+	require.Equal(t, arg.RepeatIntervalTimeUnit, result.Config.RepeatIntervalTimeUnit)
+	require.Equal(t, arg.RepeatInterval, result.Config.RepeatInterval)
+	require.Equal(t, arg.RequiresStorageNotLow, result.Config.RequiresStorageNotLow)
+	require.Equal(t, arg.RequiresBatteryNotLow, result.Config.RequiresBatteryNotLow)
+	require.Equal(t, arg.RequiresCharging, result.Config.RequiresCharging)
+	require.Equal(t, arg.RequiresDeviceIdl, result.Config.RequiresDeviceIdl)
 	require.NotZero(t, result.Config.ID)
 
 	actualConfig, err2 := store.q.GetConfig(context.Background(), result.Config.ID)
 	require.NoError(t, err2)
 	require.NotEmpty(t, actualConfig)
 	require.Equal(t, arg.ID, actualConfig.ID)
-	require.Equal(t, arg.SyncType, actualConfig.SyncType)
+	require.Equal(t, arg.NetworkType, actualConfig.NetworkType)
 	require.Equal(t, arg.IsLive, actualConfig.IsLive)
 
 	//check the urlFirst
@@ -125,11 +137,17 @@ func TestStore_GetConfigTx(t *testing.T) {
 	//test config
 	require.Equal(t, addConfigTxResult.Config.ID, result.Config.ID)
 	require.Equal(t, addConfigTxResult.Config.IsLive, result.Config.IsLive)
-	require.Equal(t, addConfigTxResult.Config.SyncType, result.Config.SyncType)
+	require.Equal(t, addConfigTxResult.Config.NetworkType, result.Config.NetworkType)
 	require.Equal(t, addConfigTxResult.Config.SaveRequest, result.Config.SaveRequest)
 	require.Equal(t, addConfigTxResult.Config.SaveResponse, result.Config.SaveResponse)
 	require.Equal(t, addConfigTxResult.Config.SaveError, result.Config.SaveError)
 	require.Equal(t, addConfigTxResult.Config.SaveSuccess, result.Config.SaveSuccess)
+	require.Equal(t, addConfigTxResult.Config.RepeatInterval, result.Config.RepeatInterval)
+	require.Equal(t, addConfigTxResult.Config.RepeatIntervalTimeUnit, result.Config.RepeatIntervalTimeUnit)
+	require.Equal(t, addConfigTxResult.Config.RequiresBatteryNotLow, result.Config.RequiresBatteryNotLow)
+	require.Equal(t, addConfigTxResult.Config.RequiresCharging, result.Config.RequiresCharging)
+	require.Equal(t, addConfigTxResult.Config.RequiresStorageNotLow, result.Config.RequiresStorageNotLow)
+	require.Equal(t, addConfigTxResult.Config.RequiresDeviceIdl, result.Config.RequiresDeviceIdl)
 
 	//test UrlFirst
 	for i, urlFirst := range addConfigTxResult.UrlFirst {

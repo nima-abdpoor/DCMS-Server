@@ -38,16 +38,22 @@ func (store *Store) execTx(ctx context.Context, fn func(queries *Queries) error)
 }
 
 type AddConfigTxParams struct {
-	ID           int64
-	SyncType     string
-	IsLive       bool
-	SaveRequest  bool
-	SaveResponse bool
-	SaveError    bool
-	SaveSuccess  bool
-	UrlHashFirst []string
-	UrlSecond    []UrlSecondTx
-	RequestUrl   []string
+	ID                     int64
+	NetworkType            string
+	IsLive                 bool
+	SaveRequest            bool
+	SaveResponse           bool
+	SaveError              bool
+	SaveSuccess            bool
+	RepeatInterval         int64
+	RepeatIntervalTimeUnit string
+	RequiresBatteryNotLow  bool
+	RequiresStorageNotLow  bool
+	RequiresCharging       bool
+	RequiresDeviceIdl      bool
+	UrlHashFirst           []string
+	UrlSecond              []UrlSecondTx
+	RequestUrl             []string
 }
 
 type AddConfigTxResult struct {
@@ -65,13 +71,19 @@ func (store Store) AddConfigTx(ctx context.Context, arg AddConfigTxParams) (AddC
 	err := store.execTx(ctx, func(queries *Queries) error {
 		var err error
 		result.Config, err = queries.CreateConfig(ctx, CreateConfigParams{
-			ID:           arg.ID,
-			SyncType:     arg.SyncType,
-			IsLive:       arg.IsLive,
-			SaveRequest:  arg.SaveRequest,
-			SaveResponse: arg.SaveResponse,
-			SaveError:    arg.SaveError,
-			SaveSuccess:  arg.SaveSuccess,
+			ID:                     arg.ID,
+			NetworkType:            arg.NetworkType,
+			IsLive:                 arg.IsLive,
+			SaveRequest:            arg.SaveRequest,
+			SaveResponse:           arg.SaveResponse,
+			SaveError:              arg.SaveError,
+			SaveSuccess:            arg.SaveSuccess,
+			RepeatInterval:         arg.RepeatInterval,
+			RepeatIntervalTimeUnit: arg.RepeatIntervalTimeUnit,
+			RequiresBatteryNotLow:  arg.RequiresBatteryNotLow,
+			RequiresStorageNotLow:  arg.RequiresStorageNotLow,
+			RequiresCharging:       arg.RequiresCharging,
+			RequiresDeviceIdl:      arg.RequiresDeviceIdl,
 		})
 		if err != nil {
 			return err
