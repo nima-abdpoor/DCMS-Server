@@ -7,13 +7,19 @@ package db
 import ()
 
 type Config struct {
-	ID           int64  `json:"id"`
-	IsLive       bool   `json:"is_live"`
-	SyncType     string `json:"sync_type"`
-	SaveRequest  bool   `json:"save_request"`
-	SaveResponse bool   `json:"save_response"`
-	SaveError    bool   `json:"save_error"`
-	SaveSuccess  bool   `json:"save_success"`
+	ID                     int64  `json:"id"`
+	IsLive                 bool   `json:"is_live"`
+	SaveRequest            bool   `json:"save_request"`
+	SaveResponse           bool   `json:"save_response"`
+	SaveError              bool   `json:"save_error"`
+	SaveSuccess            bool   `json:"save_success"`
+	NetworkType            string `json:"network_type"`
+	RepeatInterval         int64  `json:"repeat_interval"`
+	RepeatIntervalTimeUnit string `json:"repeat_interval_time_unit"`
+	RequiresBatteryNotLow  bool   `json:"requires_battery_not_low"`
+	RequiresStorageNotLow  bool   `json:"requires_storage_not_low"`
+	RequiresCharging       bool   `json:"requires_charging"`
+	RequiresDeviceIdl      bool   `json:"requires_device_idl"`
 }
 
 type Regex struct {

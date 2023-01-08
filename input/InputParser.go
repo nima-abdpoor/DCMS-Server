@@ -37,16 +37,22 @@ func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
 					}
 				}
 				configs = append(configs, db.AddConfigTxParams{
-					ID:           id,
-					SyncType:     cluster.SyncType,
-					IsLive:       cluster.IsLive,
-					SaveRequest:  cluster.SaveRequest,
-					SaveResponse: cluster.SaveResponse,
-					SaveError:    cluster.SaveError,
-					SaveSuccess:  cluster.SaveSuccess,
-					UrlHashFirst: firstUrls,
-					UrlSecond:    secondUrl,
-					RequestUrl:   cluster.RequestURL,
+					ID:                     id,
+					NetworkType:            cluster.NetworkType,
+					IsLive:                 cluster.IsLive,
+					SaveRequest:            cluster.SaveRequest,
+					SaveResponse:           cluster.SaveResponse,
+					SaveError:              cluster.SaveError,
+					SaveSuccess:            cluster.SaveSuccess,
+					RepeatInterval:         cluster.RepeatInterval,
+					RepeatIntervalTimeUnit: cluster.RepeatIntervalTimeUnit,
+					RequiresBatteryNotLow:  cluster.RequiresBatteryNotLow,
+					RequiresStorageNotLow:  cluster.RequiresStorageNotLow,
+					RequiresCharging:       cluster.RequiresCharging,
+					RequiresDeviceIdl:      cluster.RequiresDeviceIdl,
+					UrlHashFirst:           firstUrls,
+					UrlSecond:              secondUrl,
+					RequestUrl:             cluster.RequestURL,
 				})
 				index++
 			}
@@ -59,16 +65,22 @@ func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
 				}
 			}
 			configs = append(configs, db.AddConfigTxParams{
-				ID:           cluster.Name,
-				SyncType:     cluster.SyncType,
-				IsLive:       cluster.IsLive,
-				SaveRequest:  cluster.SaveRequest,
-				SaveResponse: cluster.SaveResponse,
-				SaveError:    cluster.SaveError,
-				SaveSuccess:  cluster.SaveSuccess,
-				UrlHashFirst: firstUrls,
-				UrlSecond:    secondUrl,
-				RequestUrl:   cluster.RequestURL,
+				ID:                     cluster.Name,
+				NetworkType:            cluster.NetworkType,
+				IsLive:                 cluster.IsLive,
+				SaveRequest:            cluster.SaveRequest,
+				SaveResponse:           cluster.SaveResponse,
+				SaveError:              cluster.SaveError,
+				SaveSuccess:            cluster.SaveSuccess,
+				RepeatInterval:         cluster.RepeatInterval,
+				RepeatIntervalTimeUnit: cluster.RepeatIntervalTimeUnit,
+				RequiresBatteryNotLow:  cluster.RequiresBatteryNotLow,
+				RequiresStorageNotLow:  cluster.RequiresStorageNotLow,
+				RequiresCharging:       cluster.RequiresCharging,
+				RequiresDeviceIdl:      cluster.RequiresDeviceIdl,
+				UrlHashFirst:           firstUrls,
+				UrlSecond:              secondUrl,
+				RequestUrl:             cluster.RequestURL,
 			})
 		}
 	}
@@ -80,17 +92,23 @@ type Config struct {
 }
 
 type Cluster struct {
-	Name         int64       `json:"name"`
-	Ids          []int64     `json:"ids"`
-	SyncType     string      `json:"syncType"`
-	IsLive       bool        `json:"isLive"`
-	SaveRequest  bool        `json:"saveRequest"`
-	SaveResponse bool        `json:"saveResponse"`
-	SaveError    bool        `json:"saveError"`
-	SaveSuccess  bool        `json:"saveSuccess"`
-	FirstURL     []string    `json:"firstUrl"`
-	RequestURL   []string    `json:"requestUrl"`
-	SecondURL    []SecondUrl `json:"secondUrl"`
+	Name                   int64       `json:"name"`
+	Ids                    []int64     `json:"ids"`
+	NetworkType            string      `json:"networkType"`
+	IsLive                 bool        `json:"isLive"`
+	SaveRequest            bool        `json:"saveRequest"`
+	SaveResponse           bool        `json:"saveResponse"`
+	SaveError              bool        `json:"saveError"`
+	SaveSuccess            bool        `json:"saveSuccess"`
+	RepeatInterval         int64       `json:"repeatInterval"`
+	RepeatIntervalTimeUnit string      `json:"repeatIntervalTimeUnit"`
+	RequiresBatteryNotLow  bool        `json:"requiresBatteryNotLow"`
+	RequiresStorageNotLow  bool        `json:"requiresStorageNotLow"`
+	RequiresCharging       bool        `json:"requiresCharging"`
+	RequiresDeviceIdl      bool        `json:"requiresDeviceIdl"`
+	FirstURL               []string    `json:"firstUrl"`
+	RequestURL             []string    `json:"requestUrl"`
+	SecondURL              []SecondUrl `json:"secondUrl"`
 }
 
 type SecondUrl struct {

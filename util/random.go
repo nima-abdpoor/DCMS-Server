@@ -18,9 +18,29 @@ func RandomInt(min, max int64) int64 {
 	return min + rand.Int63n(max-min+1)
 }
 
-// RandomSyncType generate a sync type which is one of these values: {0, 1, 2, 3}
-func RandomSyncType() string {
-	return strconv.Itoa(int(RandomInt(0, 3)))
+// RandomNetworkType generate a sync type which is one of these values: {0, 1, 2, 3}
+//
+//	"0" -> NetworkType.NOT_REQUIRED
+//	"2" -> NetworkType.UNMETERED
+//	"3" -> NetworkType.NOT_ROAMING
+//	"4" -> NetworkType.METERED
+//	"5" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) { NetworkType.TEMPORARILY_UNMETERED}
+//	 else { NetworkType.CONNECTED }
+func RandomNetworkType() string {
+	return strconv.Itoa(int(RandomInt(0, 7)))
+}
+
+// RandomTimeUnit generate a TimeUnit type which is one of these values: {0, 1, 2, ..., 6}
+//
+//	"0" -> TimeUnit.NANOSECONDS
+//	"1" -> TimeUnit.MICROSECONDS
+//	"2" -> TimeUnit.MICROSECONDS
+//	"3" -> TimeUnit.SECONDS
+//	"4" -> TimeUnit.MINUTES
+//	"5" -> TimeUnit.HOURS
+//	else -> TimeUnit.DAYS
+func RandomTimeUnit() string {
+	return strconv.Itoa(int(RandomInt(0, 7)))
 }
 
 // RandomBoolean generate a boolean
