@@ -7,7 +7,6 @@
                 600,
                 300
             ],
-            "syncType": "2",
             "isLive": false,
             "saveRequest": true,
             "saveResponse": false,
@@ -57,7 +56,6 @@
                 900,
                 102
             ],
-            "syncType": "1",
             "isLive": true,
             "saveRequest": true,
             "saveResponse": true,
@@ -91,7 +89,6 @@
         },
         {
             "name": 6660283978,
-            "syncType": "1",
             "isLive": false,
             "saveRequest": true,
             "saveResponse": true,
@@ -99,11 +96,11 @@
             "saveSuccess": true,
             "networkType": "6",
             "repeatInterval" : 1,
-            "repeatIntervalTimeUnit": "6",
-            "requiresBatteryNotLow" : true,
-            "requiresStorageNotLow": true,
+            "repeatIntervalTimeUnit": "4",
+            "requiresBatteryNotLow" : false,
+            "requiresStorageNotLow": false,
             "requiresCharging" : false,
-            "requiresDeviceIdl": true,
+            "requiresDeviceIdl": false,
             "firstUrl": [
                 "http://192.168.100.0/",
                 "https://dummyjson.com/products/",
