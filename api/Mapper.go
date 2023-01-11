@@ -1,7 +1,7 @@
 package api
 
 import (
-	"DCMS/db/sqlc"
+	"DCMS/db/postgresql/sqlc"
 )
 
 func MapToUrlSecondDb(urlSeconds []UrlSecond, id int64) []db.UrlSecondTx {

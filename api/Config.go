@@ -1,7 +1,7 @@
 package api
 
 import (
-	"DCMS/db/sqlc"
+	"DCMS/db/postgresql/sqlc"
 	"DCMS/util"
 	"context"
 	"database/sql"

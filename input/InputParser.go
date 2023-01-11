@@ -1,7 +1,7 @@
 package input
 
 import (
-	db "DCMS/db/sqlc"
+	db2 "DCMS/db/postgresql/sqlc"
 	"DCMS/util"
 	"encoding/json"
 	"io/ioutil"
@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
+func ReadFromFile() (configs []db2.AddConfigTxParams, err error) {
 	byteValue, err := ioutil.ReadFile("./public/single/config.txt")
 	if err != nil {
 		log.Fatal("error in Reading the config file...", err)
@@ -26,17 +26,17 @@ func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
 		firstUrls := util.MapStringArrayToHashArray(cluster.FirstURL, func(i string) uint32 {
 			return util.GenerateCR32(i)
 		})
-		secondUrl := make([]db.UrlSecondTx, len(cluster.SecondURL))
+		secondUrl := make([]db2.UrlSecondTx, len(cluster.SecondURL))
 		if len(cluster.Ids) != 0 {
 			for _, id := range cluster.Ids {
 				for i, url := range cluster.SecondURL {
-					secondUrl[i] = db.UrlSecondTx{
+					secondUrl[i] = db2.UrlSecondTx{
 						UniqueID: id,
 						UrlHash:  strconv.Itoa(int(util.GenerateCR32(url.URL))),
 						Regex:    url.Regex,
 					}
 				}
-				configs = append(configs, db.AddConfigTxParams{
+				configs = append(configs, db2.AddConfigTxParams{
 					ID:                     id,
 					NetworkType:            cluster.NetworkType,
 					IsLive:                 cluster.IsLive,
@@ -58,13 +58,13 @@ func ReadFromFile() (configs []db.AddConfigTxParams, err error) {
 			}
 		} else {
 			for i, url := range cluster.SecondURL {
-				secondUrl[i] = db.UrlSecondTx{
+				secondUrl[i] = db2.UrlSecondTx{
 					UniqueID: cluster.Name,
 					UrlHash:  strconv.Itoa(int(util.GenerateCR32(url.URL))),
 					Regex:    url.Regex,
 				}
 			}
-			configs = append(configs, db.AddConfigTxParams{
+			configs = append(configs, db2.AddConfigTxParams{
 				ID:                     cluster.Name,
 				NetworkType:            cluster.NetworkType,
 				IsLive:                 cluster.IsLive,
@@ -112,6 +112,6 @@ type Cluster struct {
 }
 
 type SecondUrl struct {
-	URL   string     `json:"url"`
-	Regex []db.Regex `json:"regex"`
+	URL   string      `json:"url"`
+	Regex []db2.Regex `json:"regex"`
 }

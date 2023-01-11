@@ -4,8 +4,6 @@
 
 package db
 
-import ()
-
 type Config struct {
 	ID                     int64  `json:"id"`
 	IsLive                 bool   `json:"is_live"`

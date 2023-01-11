@@ -1,7 +1,7 @@
 package api
 
 import (
-	db "DCMS/db/sqlc"
+	"DCMS/db/postgresql/sqlc"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
