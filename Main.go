@@ -2,16 +2,26 @@ package main
 
 import (
 	"DCMS/api"
-	"DCMS/db/postgresql/sqlc"
+	db "DCMS/db/postgresql/sqlc"
 	"DCMS/util"
 	"DCMS/watcher"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
+	"sync"
 )
 
 func main() {
-	watcher.StartWatching()
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go startServer(&wg)
+	go watcher.StartWatching(&wg)
+	wg.Wait()
+}
+
+func startServer(wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		log.Fatal("cannot load config: ", err)
