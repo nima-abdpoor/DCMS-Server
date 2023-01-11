@@ -4,11 +4,12 @@ import (
 	"DCMS/db/postgresql/sqlc"
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type LiveLog struct {
@@ -49,22 +50,17 @@ func (server *Server) postLog(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-	f, err := os.Create("LiveLogs/" + strconv.FormatInt(idPath.ID, 10) + "/" + strconv.FormatInt(idPath.ID, 10) + ".txt")
+	f, err := os.OpenFile("LiveLogs/"+strconv.FormatInt(idPath.ID, 10)+"/"+strconv.FormatInt(idPath.ID, 10)+".txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 	defer f.Close()
-	length := ctx.Request.Header.Get("Content-Length")
-	intle, _ := strconv.Atoi(length)
-	bodyBuffer := make([]byte, intle*2)
-	body, err := ctx.Request.Body.Read(bodyBuffer)
-	rawBody := string(bodyBuffer[0:body])
-	fmt.Println("rawBody:", rawBody)
-	_, err = f.WriteString(rawBody)
-	fmt.Println("length:", intle)
-	askdf, _ := ctx.GetRawData()
-	fmt.Println("getrawData:", string(askdf))
+	jsonData, err := ioutil.ReadAll(ctx.Request.Body)
+	rawBody := string(jsonData)
+	bodyStartIndex := strings.Index(rawBody, "{")
+	bodyFinishIndex := strings.Index(rawBody[bodyStartIndex:], "--*****")
+	_, err = f.WriteString(rawBody[bodyStartIndex : bodyFinishIndex+bodyStartIndex])
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return

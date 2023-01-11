@@ -16,12 +16,13 @@ func StartInfluxDB() {
 }
 
 func makeAPostRequest() {
-	time := time.Date(2023, 01, 01, 14, 28, 00, 1111111, time.Local).Unix()
+	unixTime := time.Date(2023, 01, 01, 14, 28, 00, 1111111, time.Local).Unix()
+	fmt.Println(unixTime)
 	client := &http.Client{}
 	var data = strings.NewReader(fmt.Sprintf("home,room=Living temp=21.1,hum=35.9,co=0i %d\n"+
 		"home,room=Kitchen temp=14.1,hum=36.6,co=22i 1641063600\n"+
 		"home,room=Living temp=18.2,hum=36.4,co=17i 1641067200\n"+
-		"home,room=Kitchen temp=220.7,hum=36.5,co=26i 1641067200", time))
+		"home,room=Kitchen temp=220.7,hum=36.5,co=26i 1641067200", unixTime))
 	req, err := http.NewRequest("POST", "http://localhost:8086/api/v2/write?org=DCMS&bucket=Bucket&precision=s", data)
 	if err != nil {
 		log.Fatal(err)
