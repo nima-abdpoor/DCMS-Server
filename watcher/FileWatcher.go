@@ -1,23 +1,26 @@
 package watcher
 
 import (
+	"DCMS/db/influx"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"log"
 	"os"
 	"path/filepath"
+	"sync"
 )
 
 var watcher *fsnotify.Watcher
 
-func StartWatching() {
+func StartWatching(wg *sync.WaitGroup) {
+	defer wg.Done()
 
 	// creates a new file watcher
 	watcher, _ = fsnotify.NewWatcher()
 	defer watcher.Close()
 
 	// starting at the root of the project, walk each file/directory searching for directories
-	if err := filepath.Walk("/home/nima/GolandProjects/DCMS-Server", watchDir); err != nil {
+	if err := filepath.Walk("/home/nima/GolandProjects/DCMS-Server/LiveLogs", watchDir); err != nil {
 		fmt.Println("filepath.Walk --> ERROR: ", err)
 	}
 	//
@@ -31,6 +34,7 @@ func StartWatching() {
 				if event.Has(fsnotify.Write) {
 					log.Println("modified file:", event.Name)
 					log.Println("modified file:", event.String())
+					influx.StartInfluxDB()
 				}
 
 				// watch for errors
