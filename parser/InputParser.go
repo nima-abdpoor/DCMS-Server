@@ -1,4 +1,4 @@
-package input
+package parser
 
 import (
 	db2 "DCMS/db/postgresql/sqlc"

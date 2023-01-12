@@ -2,7 +2,7 @@ package api
 
 import (
 	"DCMS/db/postgresql/sqlc"
-	"DCMS/input"
+	"DCMS/parser"
 	"context"
 	"database/sql"
 	"fmt"
@@ -40,7 +40,7 @@ func (server *Server) saveConfigToDataBase(configs []db.AddConfigTxParams, ctx *
 }
 
 func parsUploadedFile() ([]db.AddConfigTxParams, error) {
-	return input.ReadFromFile()
+	return parser.ReadFromFile()
 }
 
 func saveUploadedFile(ctx *gin.Context) {
