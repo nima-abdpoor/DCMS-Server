@@ -1,7 +1,8 @@
 package watcher
 
 import (
-	"DCMS/db/influx"
+	"DCMS/parser"
+	"bufio"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"log"
@@ -32,9 +33,23 @@ func StartWatching(wg *sync.WaitGroup) {
 			// watch for events
 			case event := <-watcher.Events:
 				if event.Has(fsnotify.Write) {
-					log.Println("modified file:", event.Name)
-					log.Println("modified file:", event.String())
-					influx.StartInfluxDB()
+					//log.Println("modified file:", event.Name)
+					//log.Println("modified file:", event.String())
+					file, err := os.Open(event.Name)
+					if err != nil {
+						log.Fatalf("failed to open")
+					}
+					scanner := bufio.NewScanner(file)
+					scanner.Split(bufio.ScanLines)
+					var text []string
+					for scanner.Scan() {
+						text = append(text, scanner.Text())
+					}
+					file.Close()
+					for _, eachLn := range text {
+						parser.ParsLog(eachLn)
+						//influx.StartInfluxDB(eachLn)
+					}
 				}
 
 				// watch for errors
