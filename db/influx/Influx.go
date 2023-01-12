@@ -11,13 +11,14 @@ import (
 
 var i float32 = 1.0
 
-func StartInfluxDB() {
+func StartInfluxDB(log string) {
+	fmt.Println(log)
 	makeAPostRequest()
 }
 
 func makeAPostRequest() {
 	unixTime := time.Date(2023, 01, 01, 14, 28, 00, 1111111, time.Local).Unix()
-	fmt.Println(unixTime)
+	//fmt.Println(unixTime)
 	client := &http.Client{}
 	var data = strings.NewReader(fmt.Sprintf("home,room=Living temp=21.1,hum=35.9,co=0i %d\n"+
 		"home,room=Kitchen temp=14.1,hum=36.6,co=22i 1641063600\n"+

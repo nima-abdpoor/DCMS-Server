@@ -45,6 +45,10 @@ func StartWatching(wg *sync.WaitGroup) {
 					for scanner.Scan() {
 						text = append(text, scanner.Text())
 					}
+					file, err = os.Create(event.Name)
+					if err != nil {
+						log.Fatalf("failed to open")
+					}
 					file.Close()
 					for _, eachLn := range text {
 						parser.ParsLog(eachLn)
