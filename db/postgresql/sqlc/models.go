@@ -4,6 +4,8 @@
 
 package db
 
+import ()
+
 type Config struct {
 	ID                     int64  `json:"id"`
 	IsLive                 bool   `json:"is_live"`
@@ -18,6 +20,17 @@ type Config struct {
 	RequiresStorageNotLow  bool   `json:"requires_storage_not_low"`
 	RequiresCharging       bool   `json:"requires_charging"`
 	RequiresDeviceIdl      bool   `json:"requires_device_idl"`
+}
+
+type Customer struct {
+	ID          int64  `json:"id"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	Info        string `json:"info"`
+	Email       string `json:"email"`
+	PackageName string `json:"package_name"`
+	SdkUuid     string `json:"sdk_uuid"`
+	SecretKey   string `json:"secret_key"`
 }
 
 type Regex struct {

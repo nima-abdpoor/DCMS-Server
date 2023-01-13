@@ -20,10 +20,10 @@ migrateDown:
 	./migrate --path /home/nima/GolandProjects/DCMS-Server/db/postgresql/migration --database "postgresql://root:secret@localhost:5432/DCMS-Test?sslmode=disable" --verbose down
 
 migrateUpW:
-	migrate -database "postgresql://root:secret@localhost:5432/DCMS-Test?sslmode=disable" -path ./db/migration up
+	migrate -database "postgresql://root:secret@localhost:5432/DCMS-Test?sslmode=disable" -path ./db/postgresql/migration up
 
 migrateDownW:
-	migrate -database "postgresql://root:secret@localhost:5432/DCMS-Test?sslmode=disable" -path ./db/migration down
+	migrate -database "postgresql://root:secret@localhost:5432/DCMS-Test?sslmode=disable" -path ./db/postgresql/migration down
 
 migrateUpProduction:
 	./migrate --path /home/nima/GolandProjects/DCMS-Server/db/postgresql/migration --database "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable" --verbose up
@@ -32,10 +32,10 @@ migrateDownProduction:
 	./migrate --path /home/nima/GolandProjects/DCMS-Server/db/postgresql/migration --database "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable" --verbose down
 
 migrateUpWProduction:
-	migrate -database "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable" -path ./db/migration up
+	migrate -database "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable" -path ./db/postgresql/migration up
 
 migrateDownWProduction:
-	migrate -database "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable" -path ./db/migration down
+	migrate -database "postgresql://root:secret@localhost:5432/DCMS?sslmode=disable" -path ./db/postgresql/migration down
 
 sqlc:
 	sqlc generate

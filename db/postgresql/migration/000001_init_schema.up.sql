@@ -1,9 +1,9 @@
 CREATE TABLE "customer"
 (
     "id"           bigserial PRIMARY KEY,
-    "user"         varchar NOT NULL,
+    "username"     varchar NOT NULL,
     "password"     varchar NOT NULL,
-    "name"         varchar NOT NULL,
+    "info"         varchar NOT NULL,
     "email"        varchar NOT NULL,
     "package_name" varchar NOT NULL,
     "sdk_uuid"     varchar NOT NULL,
