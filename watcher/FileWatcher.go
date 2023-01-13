@@ -1,6 +1,7 @@
 package watcher
 
 import (
+	"DCMS/db/influx"
 	"DCMS/parser"
 	"bufio"
 	"fmt"
@@ -51,8 +52,7 @@ func StartWatching(wg *sync.WaitGroup) {
 					}
 					file.Close()
 					for _, eachLn := range text {
-						parser.ParsLog(eachLn)
-						//influx.StartInfluxDB(eachLn)
+						influx.StartInfluxDB(parser.ParsLog(eachLn), event.Name)
 					}
 				}
 
