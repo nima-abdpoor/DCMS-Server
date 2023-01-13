@@ -5,9 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
-	"time"
 )
 
 var i float32 = 1.0
@@ -41,12 +39,11 @@ func makeAPostRequest(influxPoints []string) {
 
 func createLogAsInfluxDBLineProtocolFormat(log parser.ParsedLog, fileInfo string) (influxData []string) {
 	logType, uniqueId := getUserInfoFromFileInfo(fileInfo)
-	unixTime := time.Date(2023, 01, 10, 14, 28, 00, 1111111, time.Local).Unix()
 	if log.HasRequest {
-		influxData = append(influxData, uniqueId+",LogType="+logType+",httpLog=Request url=\""+log.Request.URL+"\",Body=\""+log.Request.Body+"\",Headers=\""+log.Request.Header+"\" "+strconv.FormatInt(unixTime, 10))
+		influxData = append(influxData, uniqueId+",LogType="+logType+",httpLog=Request url=\""+log.Request.URL+"\",Body=\""+log.Request.Body+"\",Headers=\""+log.Request.Header+"\" "+log.Request.Time)
 	}
 	if log.HasResponse {
-		influxData = append(influxData, uniqueId+",LogType="+logType+",httpLog=Response url=\""+log.Response.URL+"\",Body=\""+log.Response.Body+"\",Headers=\""+log.Response.Header+"\",Code="+log.Response.Code+" "+strconv.FormatInt(unixTime, 10))
+		influxData = append(influxData, uniqueId+",LogType="+logType+",httpLog=Response url=\""+log.Response.URL+"\",Body=\""+log.Response.Body+"\",Headers=\""+log.Response.Header+"\",Code="+log.Response.Code+" "+log.Response.Time)
 	}
 	return
 }
