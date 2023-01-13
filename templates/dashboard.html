@@ -97,7 +97,12 @@
 
         <div class="columns">
             <div class="column is-one-third">{{template "menu.html" .}}</div>
-            <div class="column is-two-thirds"><p  style="background-color: whitesmoke; padding: 10px;">{{.content}}</p></div>
+            <div class="row">
+                <div class="column is-one-thirds"><p  style="background-color: whitesmoke; padding: 10px;">{{.content}}</p></div>
+                <a href="http://127.0.0.1:8086" target="_blank">
+                    <button style="background-color: whitesmoke; color: black; padding: 10px 40px;">Go To Data DashBoard</button>
+                </a>
+            </div>
         </div>
     </div>
 </section>
