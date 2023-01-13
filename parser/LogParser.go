@@ -6,7 +6,9 @@ import (
 )
 
 type ParsedLog struct {
-	Request struct {
+	HasRequest  bool
+	HasResponse bool
+	Request     struct {
 		URL    string
 		Header string
 		Body   string
@@ -30,6 +32,7 @@ func ParsLog(log string) (paredLog ParsedLog) {
 		paredLog.Response.Time, remaining = findJsonInObject(nonHeader, "\"requestTime\":")
 		paredLog.Response.Code, remaining = findJsonInObject(remaining, "\"code\":")
 		paredLog.Response.Body, remaining = findJsonInObject(remaining, "\"body\":")
+		paredLog.HasResponse = true
 		if strings.Contains(first[0], "{\"request\"") {
 			request := strings.Split(first[0], "{\"request\":")[1]
 			if strings.Contains(request, "") {
@@ -38,13 +41,17 @@ func ParsLog(log string) (paredLog ParsedLog) {
 				paredLog.Request.Body, remaining = findJsonInObject(remaining, "\"body\":")
 				paredLog.Request.URL, remaining = findJsonInObject(remaining, "\"url\":")
 				paredLog.Response.URL = paredLog.Request.URL
+				paredLog.HasRequest = true
 			}
+		} else {
+			paredLog.HasRequest = false
 		}
 		if strings.Contains(paredLog.Response.Time, "\"") {
 			paredLog.Response.Time = paredLog.Response.Time[:len(paredLog.Response.Time)-1]
 		}
+	} else {
+		paredLog.HasResponse = false
 	}
-	printRequestParsedLog(paredLog)
 	return
 }
 
@@ -62,7 +69,7 @@ func findJsonInObject(json string, key string) (value string, remaining string) 
 			endIndex = strings.LastIndex(ss[1], "}")
 		}
 		remaining = ss[0]
-		value = ss[1][1 : endIndex-1]
+		value = cleanStringFromQuotation(ss[1][1 : endIndex-1])
 		return
 	}
 	return
@@ -72,10 +79,14 @@ func findHeader(json string) (header string, nonHeader string) {
 	if strings.Contains(json, ",\"header\":") {
 		ss := strings.Split(json, ",\"header\":")
 		index := strings.Index(ss[1], "}")
-		header = ss[1][:index+1]
+		header = cleanStringFromQuotation(ss[1][:index+1])
 		nonHeader = ss[0] + ss[1][index+1:]
 		return
 	} else {
 		return
 	}
+}
+
+func cleanStringFromQuotation(json string) string {
+	return strings.ReplaceAll(json, "\"", "")
 }
