@@ -1,7 +1,12 @@
 package api
 
 import (
+	"DCMS/api/middleware"
+	"DCMS/api/routes"
 	"DCMS/db/postgresql/sqlc"
+	"DCMS/util"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -15,8 +20,17 @@ func NewServer(store *db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
-	router.GET("/", homePage)
-	router.POST("/upload/single", server.uploadSingleFile)
+	router.Use(sessions.Sessions("session", cookie.NewStore(util.Secret)))
+
+	public := router.Group("/")
+	routes.PublicRoutes(public)
+
+	private := router.Group("/")
+	private.Use(middleware.AuthRequired)
+	routes.PrivateRoutes(private)
+
+	//router.GET("/", homePage)
+	router.POST("/dashboard/upload/single", server.uploadSingleFile)
 	router.StaticFS("/images", http.Dir("public"))
 	router.GET("/config/:id", server.getConfig)
 	router.GET("/config", server.getDefaultConfig)
