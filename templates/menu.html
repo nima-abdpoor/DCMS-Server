@@ -3,21 +3,15 @@
         {{.user}}'s Info
     </p>
     <ul class="menu-list">
-        <li><a>Create New Product</a></li>
-        <li><a>List Products</a></li>
+        <li><a>Username: {{.name}}</a></li>
+        <li><a>Email: {{.email}}</a></li>
+        <li><a>Info: {{.info}}</a></li>
     </ul>
     <p class="menu-label">
-        {{.user}}'s Library
+        SDK Info
     </p>
     <ul class="menu-list">
-        <li><a>List Items</a></li>
-    </ul>
-    <p class="menu-label">
-        Settings
-    </p>
-    <ul class="menu-list">
-        <li><a>Profile</a></li>
-        <li><a>Payments</a></li>
-        <li><a>Affiliates</a></li>
+        <li><a>ID: <u><span class="bolded">{{.uuid}}</span></u></a></li>
+        <li><a>Package Name: {{.packageName}}</a></li>
     </ul>
 </aside>

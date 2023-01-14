@@ -6,6 +6,7 @@ import (
 	"DCMS/util"
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 
 	"github.com/gin-gonic/gin"
@@ -105,13 +106,26 @@ func IndexGetHandler() gin.HandlerFunc {
 	}
 }
 
-func DashboardGetHandler() gin.HandlerFunc {
+func DashboardGetHandler(store *db.Store) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		user := session.Get(util.Userkey)
+		username := session.Get(util.Userkey)
+		customer, err := store.GetCustomerTx(context.Background(), db.GetCustomerTxParams{
+			Username: fmt.Sprint(username),
+		})
+		if err != nil {
+			c.HTML(http.StatusInternalServerError, "dashboard.html", gin.H{"content": err})
+		}
+		user := customer.Customer.Username
+		email := customer.Customer.Email
 		c.HTML(http.StatusOK, "dashboard.html", gin.H{
-			"content": "This is a dashboard",
-			"user":    user,
+			"content":     "This is a dashboard",
+			"user":        user,
+			"name":        customer.Customer.Username,
+			"email":       email,
+			"info":        customer.Customer.Info,
+			"uuid":        customer.Customer.SdkUuid,
+			"packageName": customer.Customer.PackageName,
 		})
 	}
 }

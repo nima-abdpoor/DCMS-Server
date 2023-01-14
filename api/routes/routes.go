@@ -14,7 +14,7 @@ func PublicRoutes(g *gin.RouterGroup, server *db.Store) {
 
 }
 
-func PrivateRoutes(g *gin.RouterGroup) {
-	g.GET("/dashboard", controllers.DashboardGetHandler())
+func PrivateRoutes(g *gin.RouterGroup, server *db.Store) {
+	g.GET("/dashboard", controllers.DashboardGetHandler(server))
 	g.GET("/logout", controllers.LogoutGetHandler())
 }

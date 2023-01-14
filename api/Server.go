@@ -27,7 +27,7 @@ func NewServer(store *db.Store) *Server {
 
 	private := router.Group("/")
 	private.Use(middleware.AuthRequired)
-	routes.PrivateRoutes(private)
+	routes.PrivateRoutes(private, server.store)
 
 	//router.GET("/", homePage)
 	router.POST("/dashboard/upload/single", server.uploadSingleFile)
