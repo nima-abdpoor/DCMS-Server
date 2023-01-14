@@ -231,7 +231,7 @@ type AddCustomerTxParams struct {
 	Password    string `json:"password"`
 	Info        string `json:"info"`
 	Email       string `json:"email"`
-	PackageName string `json:"PackageName"`
+	PackageName string `json:"packageName"`
 }
 
 type AddCustomerTxResult struct {

@@ -23,7 +23,7 @@ func NewServer(store *db.Store) *Server {
 	router.Use(sessions.Sessions("session", cookie.NewStore(util.Secret)))
 
 	public := router.Group("/")
-	routes.PublicRoutes(public)
+	routes.PublicRoutes(public, server.store)
 
 	private := router.Group("/")
 	private.Use(middleware.AuthRequired)
@@ -37,6 +37,7 @@ func NewServer(store *db.Store) *Server {
 	router.POST("/config", server.postConfig)
 	router.POST("/sendLogFile/:id", server.postLogFile)
 	router.POST("/sendLog/:id", server.postLog)
+	router.POST("/customer", server.postCustomer)
 	server.router = router
 	return server
 }

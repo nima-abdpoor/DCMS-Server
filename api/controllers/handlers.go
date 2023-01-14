@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"DCMS/api/helpers"
+	"DCMS/db/postgresql/sqlc"
 	"DCMS/util"
+	"context"
+	"database/sql"
 	"github.com/gin-contrib/sessions"
 
 	"github.com/gin-gonic/gin"
@@ -29,7 +32,7 @@ func LoginGetHandler() gin.HandlerFunc {
 	}
 }
 
-func LoginPostHandler() gin.HandlerFunc {
+func LoginPostHandler(store *db.Store) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		user := session.Get(util.Userkey)
@@ -45,8 +48,19 @@ func LoginPostHandler() gin.HandlerFunc {
 			c.HTML(http.StatusBadRequest, "login.html", gin.H{"content": "Parameters can't be empty"})
 			return
 		}
-
-		if !helpers.CheckUserPass(username, password) {
+		customer, err := store.GetCustomerTx(context.Background(), db.GetCustomerTxParams{
+			Username: username,
+		})
+		if err != nil {
+			if err == sql.ErrNoRows {
+				c.HTML(http.StatusNotFound, "login.html", gin.H{"content": err})
+				return
+			}
+			c.HTML(http.StatusInternalServerError, "login.html", gin.H{"content": err})
+			return
+		}
+		err = util.CheckPassword(password, customer.Customer.Password)
+		if err != nil {
 			c.HTML(http.StatusUnauthorized, "login.html", gin.H{"content": "Incorrect username or password"})
 			return
 		}
