@@ -175,3 +175,46 @@ func TestStore_GetConfigTx(t *testing.T) {
 		require.Equal(t, requestUrl.UniqueID, result.RequestUrl[i].UniqueID)
 	}
 }
+
+func addCustomerTx(t *testing.T) AddCustomerTxResult {
+	store := NewStore(testDB)
+	var arg = AddCustomerTxParams{
+		Username:    util.RandomString(int(util.RandomInt(5, 15))),
+		Password:    util.RandomString(int(util.RandomInt(5, 15))),
+		Info:        util.RandomString(int(util.RandomInt(5, 15))),
+		Email:       util.RandomString(int(util.RandomInt(5, 15))),
+		PackageName: util.RandomString(int(util.RandomInt(5, 15))),
+	}
+	result, err := store.AddCustomerTx(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, result)
+	require.Equal(t, arg.Username, result.Customer.Username)
+	require.NotEqual(t, arg.Password, result.Customer.Password)
+	require.Equal(t, arg.Email, result.Customer.Email)
+	require.Equal(t, arg.Info, result.Customer.Info)
+	require.Equal(t, arg.PackageName, result.Customer.PackageName)
+	return result
+}
+
+func TestStore_AddCustomerTx(t *testing.T) {
+	addConfigTx(t)
+}
+
+func TestStore_GetCustomerTx(t *testing.T) {
+	addCustomerTx := addCustomerTx(t)
+	store := NewStore(testDB)
+	arg := GetCustomerTxParams{
+		Username: addCustomerTx.Customer.Username,
+	}
+	actualResult, err := store.GetCustomerTx(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, actualResult)
+	require.Equal(t, addCustomerTx.Customer.Email, actualResult.Customer.Email)
+	require.Equal(t, addCustomerTx.Customer.ID, actualResult.Customer.ID)
+	require.Equal(t, addCustomerTx.Customer.Info, actualResult.Customer.Info)
+	require.Equal(t, addCustomerTx.Customer.SdkUuid, actualResult.Customer.SdkUuid)
+	require.Equal(t, addCustomerTx.Customer.Username, actualResult.Customer.Username)
+	require.Equal(t, addCustomerTx.Customer.PackageName, actualResult.Customer.PackageName)
+	require.Equal(t, addCustomerTx.Customer.SecretKey, actualResult.Customer.SecretKey)
+	require.Equal(t, addCustomerTx.Customer.Password, actualResult.Customer.Password)
+}

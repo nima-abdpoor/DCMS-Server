@@ -1,9 +1,11 @@
 package db
 
 import (
+	"DCMS/util"
 	"context"
 	"database/sql"
 	"fmt"
+	"os/exec"
 )
 
 type Store struct {
@@ -198,6 +200,61 @@ func (store Store) GetConfigTx(ctx context.Context, arg GetConfigTxParams) (GetC
 		if err != nil {
 			return err
 		}
+		return nil
+	})
+	return result, err
+}
+
+type GetCustomerTxParams struct {
+	Username string `json:"username"`
+}
+
+type GetCustomerTxResult struct {
+	Customer Customer `json:"customer"`
+}
+
+func (store Store) GetCustomerTx(ctx context.Context, arg GetCustomerTxParams) (GetCustomerTxResult, error) {
+	var result GetCustomerTxResult
+	err := store.execTx(ctx, func(queries *Queries) error {
+		var err error
+		result.Customer, err = queries.GetCustomerByUsername(ctx, arg.Username)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	return result, err
+}
+
+type AddCustomerTxParams struct {
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	Info        string `json:"info"`
+	Email       string `json:"email"`
+	PackageName string `json:"PackageName"`
+}
+
+type AddCustomerTxResult struct {
+	Customer Customer `json:"customer"`
+}
+
+func (store Store) AddCustomerTx(ctx context.Context, arg AddCustomerTxParams) (AddCustomerTxResult, error) {
+	var result AddCustomerTxResult
+	password, err := util.HashedPassword(arg.Password)
+	newUUID, err := exec.Command("uuidgen").Output()
+	if err != nil {
+		return result, err
+	}
+	err = store.execTx(ctx, func(queries *Queries) error {
+		result.Customer, err = queries.CreateCustomer(ctx, CreateCustomerParams{
+			Username:    arg.Username,
+			Password:    password,
+			Info:        arg.Info,
+			Email:       arg.Email,
+			PackageName: arg.PackageName,
+			SdkUuid:     string(newUUID),
+			SecretKey:   util.RandomString(15),
+		})
 		return nil
 	})
 	return result, err
