@@ -232,6 +232,7 @@ type AddCustomerTxParams struct {
 	Info        string `json:"info"`
 	Email       string `json:"email"`
 	PackageName string `json:"packageName"`
+	SecretKey   string `json:"secretKey"`
 }
 
 type AddCustomerTxResult struct {
@@ -253,7 +254,7 @@ func (store Store) AddCustomerTx(ctx context.Context, arg AddCustomerTxParams) (
 			Email:       arg.Email,
 			PackageName: arg.PackageName,
 			SdkUuid:     string(newUUID),
-			SecretKey:   util.RandomString(15),
+			SecretKey:   arg.SecretKey,
 		})
 		return nil
 	})
