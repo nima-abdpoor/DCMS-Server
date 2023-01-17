@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"DCMS/util/decryption"
 	"fmt"
 	"strings"
 )
@@ -23,18 +24,21 @@ type ParsedLog struct {
 	}
 }
 
-func ParsLog(log string) (paredLog ParsedLog) {
+func ParsLog(log string, key string) (paredLog ParsedLog) {
+	var text = strings.TrimSuffix(log, "}")
+	text = strings.TrimPrefix(text, "{")
+	log = decryption.Decrypt(text, key)
 	var nonHeader = ""
 	var remaining = ""
-	if strings.Contains(log, "\"response\"") {
-		first := strings.Split(log, ",\"response\":")
+	if strings.Contains(log, "\"RESPONSE\"") {
+		first := strings.Split(log, ",\"RESPONSE\":")
 		paredLog.Response.Header, nonHeader = findHeader(first[1])
 		paredLog.Response.Time, remaining = findJsonInObject(nonHeader, "\"requestTime\":")
 		paredLog.Response.Code, remaining = findJsonInObject(remaining, "\"code\":")
 		paredLog.Response.Body, remaining = findJsonInObject(remaining, "\"body\":")
 		paredLog.HasResponse = true
-		if strings.Contains(first[0], "{\"request\"") {
-			request := strings.Split(first[0], "{\"request\":")[1]
+		if strings.Contains(first[0], "{\"REQUEST\"") {
+			request := strings.Split(first[0], "{\"REQUEST\":")[1]
 			if strings.Contains(request, "") {
 				paredLog.Request.Header, nonHeader = findHeader(request)
 				paredLog.Request.Time, remaining = findJsonInObject(nonHeader, "\"requestTime\":")
