@@ -12,16 +12,23 @@ import (
 )
 
 func main() {
+	server, config := loadConfig()
 	var wg sync.WaitGroup
 	wg.Add(2)
-	go startServer(&wg)
-	go watcher.StartWatching(&wg)
+	go startServer(&wg, server, config)
+	go watcher.StartWatching(&wg, server.Store)
 	wg.Wait()
 }
 
-func startServer(wg *sync.WaitGroup) {
+func startServer(wg *sync.WaitGroup, server *api.Server, config util.Config) {
 	defer wg.Done()
+	err := server.Start(config.ServerAddress)
+	if err != nil {
+		log.Fatal("cannot start the server... ", err)
+	}
+}
 
+func loadConfig() (*api.Server, util.Config) {
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		log.Fatal("cannot load config: ", err)
@@ -32,9 +39,5 @@ func startServer(wg *sync.WaitGroup) {
 	}
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
-
-	err = server.Start(config.ServerAddress)
-	if err != nil {
-		log.Fatal("cannot start the server... ", err)
-	}
+	return server, config
 }

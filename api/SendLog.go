@@ -37,7 +37,7 @@ func (server *Server) postLog(ctx *gin.Context) {
 		ctx.JSON(http.StatusForbidden, "This ID Is Reserved")
 		return
 	}
-	_, err := server.store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: idPath.ID})
+	_, err := server.Store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: idPath.ID})
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))

@@ -41,7 +41,7 @@ func (server *Server) getConfig(ctx *gin.Context) {
 		ctx.JSON(http.StatusForbidden, "This ID Is Reserved")
 		return
 	}
-	result, err := server.store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: req.ID})
+	result, err := server.Store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: req.ID})
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -53,7 +53,7 @@ func (server *Server) getConfig(ctx *gin.Context) {
 }
 
 func (server *Server) getDefaultConfig(ctx *gin.Context) {
-	configResult, err := server.store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: util.DefaultConfigId})
+	configResult, err := server.Store.GetConfigTx(context.Background(), db.GetConfigTxParams{ID: util.DefaultConfigId})
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -100,7 +100,7 @@ func (server *Server) postConfig(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	configResult, err := server.store.AddConfigTx(context.Background(), db.AddConfigTxParams{
+	configResult, err := server.Store.AddConfigTx(context.Background(), db.AddConfigTxParams{
 		ID:                     req.ID,
 		NetworkType:            req.NetworkType,
 		IsLive:                 req.IsLive,

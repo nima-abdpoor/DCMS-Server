@@ -23,7 +23,7 @@ func (server *Server) postCustomer(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	customerResult, err := server.store.AddCustomerTx(context.Background(), arg)
+	customerResult, err := server.Store.AddCustomerTx(context.Background(), arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return

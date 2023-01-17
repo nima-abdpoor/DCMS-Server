@@ -27,7 +27,7 @@ func (server *Server) uploadSingleFile(ctx *gin.Context) {
 
 func (server *Server) saveConfigToDataBase(configs []db.AddConfigTxParams, ctx *gin.Context) {
 	for _, config := range configs {
-		configResult, err := server.store.AddConfigTx(context.Background(), config)
+		configResult, err := server.Store.AddConfigTx(context.Background(), config)
 		if err != nil {
 			if err == sql.ErrNoRows {
 				ctx.JSON(http.StatusNotFound, errorResponse(err))

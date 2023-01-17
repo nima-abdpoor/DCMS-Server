@@ -2,8 +2,10 @@ package watcher
 
 import (
 	"DCMS/db/influx"
+	"DCMS/db/postgresql/sqlc"
 	"DCMS/parser"
 	"bufio"
+	"context"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"log"
@@ -14,9 +16,22 @@ import (
 
 var watcher *fsnotify.Watcher
 
-func StartWatching(wg *sync.WaitGroup) {
-	defer wg.Done()
+func getCustomerKey(store *db.Store) (string, error) {
+	customer, err := store.GetCustomerTx(context.Background(), db.GetCustomerTxParams{
+		Username: "nima",
+	})
+	if err != nil {
+		return "", err
+	}
+	return customer.Customer.SecretKey, nil
+}
 
+func StartWatching(wg *sync.WaitGroup, store *db.Store) {
+	defer wg.Done()
+	key, err := getCustomerKey(store)
+	if err != nil {
+		return
+	}
 	// creates a new file watcher
 	watcher, _ = fsnotify.NewWatcher()
 	defer watcher.Close()
@@ -52,7 +67,7 @@ func StartWatching(wg *sync.WaitGroup) {
 					}
 					file.Close()
 					for _, eachLn := range text {
-						influx.StartInfluxDB(parser.ParsLog(eachLn), event.Name)
+						influx.StartInfluxDB(parser.ParsLog(eachLn, key), event.Name)
 					}
 				}
 
