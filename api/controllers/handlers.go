@@ -33,6 +33,22 @@ func LoginGetHandler() gin.HandlerFunc {
 	}
 }
 
+func GetConfig() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		user := session.Get(util.Userkey)
+		if user != nil {
+			c.HTML(http.StatusBadRequest, "postConfig.html",
+				gin.H{
+					"content": "Please logout first",
+					"user":    user,
+				})
+			return
+		}
+		c.HTML(http.StatusOK, "postConfig.html", nil)
+	}
+}
+
 func LoginPostHandler(store *db.Store) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)

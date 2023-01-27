@@ -10,6 +10,7 @@ func PublicRoutes(g *gin.RouterGroup, server *db.Store) {
 
 	g.GET("/login", controllers.LoginGetHandler())
 	g.POST("/login", controllers.LoginPostHandler(server))
+	g.GET("/postConfig", controllers.GetConfig())
 	g.GET("/", controllers.IndexGetHandler())
 
 }
